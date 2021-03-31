@@ -34,37 +34,15 @@ public class Metricas_Metodos {
 	private ArrayList<ArrayList<String>> al = new ArrayList<ArrayList<String>>();
 	private ArrayList<String> a = new ArrayList<String>();
 	
-	public Metricas_Metodos() {
+	public Metricas_Metodos(int j) {
 		super();
+		for(int i=0;i!=j;i++)
 		al.add(new ArrayList<String>());
-		al.add(new ArrayList<String>());
+		
 		
 	}
 
-//	private ArrayList<String> method_LOC(InputStream is) throws Exception{
-//		methodNamesLOC.clear();
-//		
-//        CompilationUnit cu = StaticJavaParser.parse(is);
-//       
-//        System.out.println(1);--
-//        new VoidVisitorAdapter<Object>() {
-//            public void visit(MethodDeclaration method, Object arg) {
-//                super.visit(method, arg);
-//                System.out.println(1);
-//                methodNamesLOC.add(method.getNameAsString());
-//                methodNamesLOC.add(String.valueOf(method.getEnd().get().line - method.getBegin().get().line +1));
-//            }
-//            public void visit(ConstructorDeclaration method, Object arg) {
-//                super.visit(method, arg);
-//                System.out.println(1);
-//                methodNamesLOC.add(method.getNameAsString());
-//                methodNamesLOC.add(String.valueOf(method.getEnd().get().line - method.getBegin().get().line +1));
-//            }
-//        
-//        }.visit(cu,null);
-//        
-//    return methodNamesLOC;
-//}
+
 	public void analyze(File file) throws FileNotFoundException {
 		 InputStream is = new FileInputStream(file);
 		 CompilationUnit cu = StaticJavaParser.parse(is);
@@ -82,10 +60,9 @@ public class Metricas_Metodos {
 
 	//	
     public static void main(String[] args) throws FileNotFoundException, Exception {
-    	//File file = new File("src/main/java/Grupo45/Projeto/Metricas_Metodos.java");
         File file = new File("C://jasml//src//com//jasml//compiler//ParsingException.java");
     	
-    	Metricas_Metodos mm = new Metricas_Metodos();
+    	Metricas_Metodos mm = new Metricas_Metodos(2);
     	mm.analyze(file);
     	
         for(int i=0;i!=mm.al.get(0).size();i++) {
