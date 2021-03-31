@@ -60,7 +60,7 @@ public class Metricas_Metodos {
 
 	//	
     public static void main(String[] args) throws FileNotFoundException, Exception {
-        File file = new File("C://jasml//src//com//jasml//compiler//ParsingException.java");
+        File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
     	
     	Metricas_Metodos mm = new Metricas_Metodos(2);
     	mm.analyze(file);

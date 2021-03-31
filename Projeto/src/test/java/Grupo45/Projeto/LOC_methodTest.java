@@ -1,25 +1,25 @@
 package Grupo45.Projeto;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
-import junit.framework.TestCase;
-
-public class LOC_methodTest extends TestCase {
+class LOC_methodTest {
 	static ArrayList<ArrayList<String>> aa;
 	static LOC_method l;
 
-	public LOC_methodTest(String name) {
-		super(name);
-	}
-
-	protected void setUp() throws Exception {
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
 		aa = new ArrayList<ArrayList<String>>();
 		ArrayList<String> a1 = new ArrayList<String>();
 		ArrayList<String> a2 = new ArrayList<String>();
@@ -31,15 +31,14 @@ public class LOC_methodTest extends TestCase {
 	    InputStream is = new FileInputStream(file);
 		 CompilationUnit cu = StaticJavaParser.parse(is);
 		 new LOC_method().visit(cu, aa);
-		super.setUp();
 	}
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	@AfterAll
+	static void tearDownAfterClass() throws Exception {
 	}
 
-	public final void testVisit() {
-		
+	@Test
+	final void testVisitMethodDeclarationArrayListOfArrayListOfString() {
 		assertNotNull(aa);
 		assertNotNull(aa.get(0));
 		assertNotNull(aa.get(1));
@@ -60,12 +59,6 @@ public class LOC_methodTest extends TestCase {
 		assertEquals("3", aa.get(1).get(4));
 		assertEquals("getMessage()", aa.get(0).get(5));
 		assertEquals("21", aa.get(1).get(5));
-		
-		
 	}
-
-
-
-	
 
 }
