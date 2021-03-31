@@ -49,7 +49,6 @@ public class Cyclo_method {
 
 			public void visit(ForEachStmt statement, Counter c) {
 				c.add(method_name);
-
 				super.visit(statement, c);
 				
 			}

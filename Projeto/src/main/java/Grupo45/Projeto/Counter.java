@@ -14,7 +14,6 @@ public class Counter {
 		}
 	}
 	
-
 	public HashMap<String, Integer> getMap() {
 		return map;
 	}
