@@ -48,8 +48,9 @@ public class Metricas_Metodos {
 		 InputStream is = new FileInputStream(file);
 		 CompilationUnit cu = StaticJavaParser.parse(is);
 		 new LOC_method().visit(cu, al);
-		 
-		 
+		 if(!al.isEmpty()) {
+			loc_class= al.get(0).size();
+		 }
 	}
 	
 
