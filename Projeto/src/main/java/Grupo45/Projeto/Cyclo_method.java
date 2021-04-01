@@ -85,6 +85,10 @@ public class Cyclo_method {
 		}.visit(cu, c);
 		return c.getMap();
 	}
+
+	public static ArrayList getNames() {
+		return names;
+	}
 	
 	
 	

@@ -19,7 +19,8 @@ class Cyclo_methodTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		names = new ArrayList<String>();
+		Cyclo_method cm = new Cyclo_method();
+		names = cm.getNames();
 		f = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
 		InputStream is = new FileInputStream(f);
 		h = new Cyclo_method().cyclo_method(is);
@@ -50,6 +51,23 @@ class Cyclo_methodTest {
 		assertTrue(h.containsKey("parseClassAttributes()"));
 		assertTrue(h.containsKey("parseDouble(String)"));
 		assertTrue(h.containsKey("parseMaxStackOrLocals(Attribute_Code)"));
+		
+		assertEquals("SourceCodeParser(File)", names.get(0));
+		assertEquals("SourceCodeParser(String)", names.get(1));
+		assertEquals("parse()", names.get(2));
+		assertEquals("preprocessConstantValues()", names.get(3));
+		assertEquals("parseClass()", names.get(4));
+		assertEquals("parseClassSignature()", names.get(5));
+		
+		assertEquals(1, h.get(names.get(0)));
+		assertEquals(1, h.get(names.get(1)));
+		assertEquals(2, h.get(names.get(2)));
+		assertEquals(5, h.get(names.get(3)));
+		assertEquals(4, h.get(names.get(4)));
+		assertEquals(8, h.get(names.get(5)));
+		assertEquals(128, h.get(names.get(12)));
+		
+		System.out.println("Cyclo_methodTest.testCyclo_method() executed");
 	}
 
 }
