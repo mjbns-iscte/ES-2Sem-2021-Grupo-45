@@ -44,7 +44,7 @@ class Metricas_MetodosTest {
 		assertEquals(6,al.get(1).size());
 		
 		loc.setUpBeforeClass();
-		loc.testVisitMethodDeclarationArrayListOfArrayListOfString();
+		loc.testVisit();
 	}
 
 	@Test

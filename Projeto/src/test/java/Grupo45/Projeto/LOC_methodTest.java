@@ -38,7 +38,7 @@ class LOC_methodTest {
 	}
 
 	@Test
-	final void testVisitMethodDeclarationArrayListOfArrayListOfString() {
+	final void testVisit() {
 		assertNotNull(aa);
 		assertNotNull(aa.get(0));
 		assertNotNull(aa.get(1));
