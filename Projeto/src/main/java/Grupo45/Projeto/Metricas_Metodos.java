@@ -33,6 +33,7 @@ import java.util.Map;
 public class Metricas_Metodos {
 	private ArrayList<ArrayList<String>> al = new ArrayList<ArrayList<String>>();
 	private ArrayList<String> a = new ArrayList<String>();
+	private int loc_clas =0;
 	
 	public Metricas_Metodos(int j) {
 		super();
@@ -44,6 +45,7 @@ public class Metricas_Metodos {
 
 
 	public void analyze(File file) throws FileNotFoundException {
+		 loc_clas =0;
 		 InputStream is = new FileInputStream(file);
 		 CompilationUnit cu = StaticJavaParser.parse(is);
 		 new LOC_method().visit(cu, al);
