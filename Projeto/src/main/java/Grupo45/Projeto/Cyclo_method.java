@@ -26,7 +26,7 @@ public class Cyclo_method {
 	private static ArrayList names = new ArrayList<String>();
 	private String method_name;
 
-	private HashMap<String, Integer> cyclo_method(InputStream is) {
+	public HashMap<String, Integer> cyclo_method(InputStream is) {
 
 		CompilationUnit cu = StaticJavaParser.parse(is);
 		Counter c = new Counter();
@@ -85,7 +85,10 @@ public class Cyclo_method {
 		}.visit(cu, c);
 		return c.getMap();
 	}
-
+	
+	
+	
+/*
 	public static void main(String[] args) throws FileNotFoundException {
 		File f= new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
 		//File f = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
@@ -97,7 +100,9 @@ public class Cyclo_method {
 			System.out.println(nome);
 			System.out.println(hm.get(nome));
 		}
+		System.out.println(hm.size());
+		System.out.println(names.size());
 
 	}
-
+*/
 }
