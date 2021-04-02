@@ -52,7 +52,7 @@ public class Metricas_Metodos {
 		 new LOC_method().visit(cu, al);
 	//	 map = new Cyclo_method().cyclo_method(is);
 		 if(!al.isEmpty()) {
-			 nom_class= al.get(0).size();
+			 nom_class= al.get(0).size(); 
 			
 		 }
 	}
@@ -62,9 +62,9 @@ public class Metricas_Metodos {
 	}
 
 
-	public HashMap<String, Integer> getMap() {
-		return map;
-	}
+//	public HashMap<String, Integer> getMap() {
+//		return map;
+//	} 
 
 
 	public ArrayList<ArrayList<String>> getAl() {
