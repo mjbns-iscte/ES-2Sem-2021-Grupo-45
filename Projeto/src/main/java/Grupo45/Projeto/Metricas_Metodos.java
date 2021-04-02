@@ -101,12 +101,12 @@ public class Metricas_Metodos {
 		return al;
 	}
 
-	
+	/*
     public static void main(String[] args) throws FileNotFoundException, Exception {
    //     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
    // 	  File file = new File("C:\\Users\\jtfgb\\OneDrive - ISCTE-IUL\\Documentos\\ES_Projeto Teste\\src\\com\\jasml\\compiler\\SourceCodeParser.java"); 
    // 	File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-    	File file = new File("C:\\Users\\Francisco\\Desktop\\IGE\\3º Ano\\3Ano2Sem\\Engenharia de Software\\jasml_0.10\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+    	File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
     	Metricas_Metodos mm = new Metricas_Metodos(2);
     	mm.analyze(file);
     	mm.analyzeCyclometicComplexity(file);
@@ -121,7 +121,7 @@ public class Metricas_Metodos {
 		System.out.println("A classe tem " +  mm.getLoc_class() + " linhas de código.");
 
     }
-
+*/
 
 	
 	
