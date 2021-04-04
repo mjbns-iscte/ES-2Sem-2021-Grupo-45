@@ -26,6 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileSystemView;
+
 
 
 
@@ -37,34 +44,34 @@ public class Metricas_Metodos {
 	private HashMap<String, Integer> map= new HashMap<>();
 	private int wmc;
 	private int loc_class;
-	
+	private JFrame f= new JFrame();
+
 	public Metricas_Metodos(int j) {
 		super();
 		for(int i=0;i!=j;i++)
-		al.add(new ArrayList<String>());
-		
-		
-	}
+			al.add(new ArrayList<String>());
 
+
+	}
 
 	public void analyze(File file) throws FileNotFoundException {
 		nom_class=0;
 		loc_class = 0;
-		 InputStream is = new FileInputStream(file);
-		 CompilationUnit cu = StaticJavaParser.parse(is);
-		 new LOC_method().visit(cu, al);
-		 if(!al.isEmpty()) {
-			 nom_class= al.get(0).size(); 
-		 }
-		 new VoidVisitorAdapter<Object>() {
-				public void visit (ClassOrInterfaceDeclaration n, Object t) {
-					super.visit( n, loc_class);
-					loc_class = (n.getEnd().get().line - n.getBegin().get().line + 1);
-				}
-			}.visit(cu, null);
-			
+		InputStream is = new FileInputStream(file);
+		CompilationUnit cu = StaticJavaParser.parse(is);
+		new LOC_method().visit(cu, al);
+		if(!al.isEmpty()) {
+			nom_class= al.get(0).size(); 
+		}
+		new VoidVisitorAdapter<Object>() {
+			public void visit (ClassOrInterfaceDeclaration n, Object t) {
+				super.visit( n, loc_class);
+				loc_class = (n.getEnd().get().line - n.getBegin().get().line + 1);
+			}
+		}.visit(cu, null);
+
 	}
-	
+
 	public void analyzeCyclometicComplexity (File file) throws FileNotFoundException {
 		InputStream is = new FileInputStream(file);
 		map = new Cyclo_method().cyclo_method(is);
@@ -73,10 +80,10 @@ public class Metricas_Metodos {
 			String nomes = getAl().get(0).get(i);		
 			int aux =getMap().get(nomes);
 			wmc = wmc + aux;
-						
+
 		}
 	}
-	
+
 	public int getWmc() {
 		return wmc;
 	}
@@ -85,8 +92,8 @@ public class Metricas_Metodos {
 	public int getNom_class() {
 		return nom_class;
 	}
-	
-	
+
+
 	public int getLoc_class() {
 		return loc_class;
 	}
@@ -101,31 +108,49 @@ public class Metricas_Metodos {
 		return al;
 	}
 
-	/*
-    public static void main(String[] args) throws FileNotFoundException, Exception {
-   //     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
-   // 	  File file = new File("C:\\Users\\jtfgb\\OneDrive - ISCTE-IUL\\Documentos\\ES_Projeto Teste\\src\\com\\jasml\\compiler\\SourceCodeParser.java"); 
-   // 	File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-    	File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
-    	Metricas_Metodos mm = new Metricas_Metodos(2);
-    	mm.analyze(file);
-    	mm.analyzeCyclometicComplexity(file);
-        for(int i=0;i!=mm.al.get(0).size();i++) {
-        	System.out.println(mm.al.get(0).get(i));
-        	String aux= mm.al.get(0).get(i);
-        	System.out.println(mm.al.get(1).get(i));
-        	System.out.println(mm.getMap().get(aux));
-        }
-        System.out.println("A classe tem " +  mm.getWmc() + " de complexidade ciclomática.");
-        System.out.println("A classe tem " +  mm.getNom_class() + " metodos.");
+	public void setupGUI() {
+		f = new JFrame("GUI");
+		f.setSize(400, 400);                                                       
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JButton button = new JButton("OPEN");
+		JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		//button.addActionListener();
+		JPanel p = new JPanel();
+		p.add(button);
+		JLabel l = new JLabel("No folder selected");
+		p.add(l);
+		f.add(p);
+	}
+
+
+
+	public static void main(String[] args) throws FileNotFoundException, Exception {
+		//     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
+		File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
+		// 	File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		//	File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
+		Metricas_Metodos mm = new Metricas_Metodos(2);
+		mm.analyze(file);
+		mm.analyzeCyclometicComplexity(file);
+		mm.setupGUI();    
+		mm.f.setVisible(true);
+		mm.f.show();
+		for(int i=0;i!=mm.al.get(0).size();i++) {
+			System.out.println(mm.al.get(0).get(i));
+			String aux= mm.al.get(0).get(i);
+			System.out.println(mm.al.get(1).get(i));
+			System.out.println(mm.getMap().get(aux));
+		}
+		System.out.println("A classe tem " +  mm.getWmc() + " de complexidade ciclomática.");
+		System.out.println("A classe tem " +  mm.getNom_class() + " metodos.");
 		System.out.println("A classe tem " +  mm.getLoc_class() + " linhas de código.");
 
-    }
-*/
+	}
 
-	
-	
+
+
+
 
 }
- 
+
 
