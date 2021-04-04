@@ -1,5 +1,7 @@
 package Grupo45.Projeto;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,6 +47,8 @@ public class Metricas_Metodos {
 	private int wmc;
 	private int loc_class;
 	private JFrame f= new JFrame();
+	private JLabel l= new JLabel();
+	private JFileChooser j;
 
 	public Metricas_Metodos(int j) {
 		super();
@@ -113,17 +117,32 @@ public class Metricas_Metodos {
 		f.setSize(400, 400);                                                       
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JButton button = new JButton("OPEN");
-		JFileChooser j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		//button.addActionListener();
 		JPanel p = new JPanel();
 		p.add(button);
-		JLabel l = new JLabel("No folder selected");
+		l = new JLabel("No folder selected");
 		p.add(l);
 		f.add(p);
+		button.addActionListener(new ActionListener() {			
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				String command= evt.getActionCommand();
+				l.setText("the user cancelled the operation");
+				if (command.equals("OPEN")) {
+					j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+					int r = j.showOpenDialog(null);
+					if (r == JFileChooser.APPROVE_OPTION) {
+						l.setText(j.getSelectedFile().getAbsolutePath());
+						String s = j.getSelectedFile().getAbsolutePath();
+						System.out.println(s);
+					}
+					else
+						l.setText("the user cancelled the operation");
+				}
+			}
+
+		});
 	}
-
-
-
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		//     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
 		File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
