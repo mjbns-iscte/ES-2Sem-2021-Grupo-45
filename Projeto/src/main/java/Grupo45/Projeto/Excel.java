@@ -26,5 +26,30 @@ public class Excel {
 		
 		s = w.createSheet("METRICAS");
 		
+		Font headerFont = w.createFont();
+		headerFont.setBold(true);
+		headerFont.setFontHeightInPoints((short)14);
+		headerFont.setColor(IndexedColors.BLACK.getIndex());
+		
+		CellStyle headerCellStyle = w.createCellStyle();
+		headerCellStyle.setFont(headerFont);
+		
+		Row headerRow = s.createRow(0);
+		
+		for(int i = 0; i < columns.length; i++) {
+			Cell cell = headerRow.createCell(i);
+			cell.setCellValue(columns[i]);
+			cell.setCellStyle(headerCellStyle);
+		}
+		
+		for(int i = 0; i < columns.length; i++) {
+			s.autoSizeColumn(i);
+		}
+		
+		FileOutputStream fileOut = new FileOutputStream(g_path);
+		w.write(fileOut);
+		fileOut.close();
+		
 	}
+		
 }
