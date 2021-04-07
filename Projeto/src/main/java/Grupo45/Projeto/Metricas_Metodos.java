@@ -1,5 +1,6 @@
 package Grupo45.Projeto;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -28,11 +29,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileSystemView;
 
 
@@ -40,6 +44,7 @@ import javax.swing.filechooser.FileSystemView;
 
 
 public class Metricas_Metodos {
+	
 	private ArrayList<ArrayList<String>> al = new ArrayList<ArrayList<String>>();
 	private ArrayList<String> a = new ArrayList<String>();
 	private int nom_class=0;
@@ -48,7 +53,24 @@ public class Metricas_Metodos {
 	private int loc_class;
 	private JFrame f= new JFrame();
 	private JLabel l= new JLabel();
+	private JLabel l1= new JLabel();
 	private JFileChooser j;
+	private String[] options= new String[]{"LOC_method","Cyclo_method","NOM_class","WMC_class"};
+	private String[] metodos= new String[]{"AND","OR"};
+	private JComboBox jcb = new JComboBox(metodos);
+    private JComboBox jcb1 = new JComboBox(metodos);
+    private JComboBox jcb2 = new JComboBox(options);
+    private JComboBox jcb3 = new JComboBox(metodos);
+    private JComboBox jcb4 = new JComboBox(metodos);
+    private JComboBox jcb5 = new JComboBox(options);
+    private JTextField jf= new JTextField("Number");
+    private JTextField jf1= new JTextField("Number");
+    private JTextField jf2= new JTextField("Number");
+    private JTextField jf3= new JTextField("Number");
+    JPanel jp= new JPanel();
+    JPanel jp1= new JPanel();
+    JPanel jp2= new JPanel();
+    JPanel jp3= new JPanel();
 	private ArrayList<File> ficheiros= new ArrayList<>();
 
 	public Metricas_Metodos(int j) {
@@ -130,18 +152,33 @@ public class Metricas_Metodos {
 		}
 		return ficheiros;
 	}
-	public void setupGUI() {
-		f = new JFrame("GUI");
-		f.setSize(400, 400);                                                       
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JButton button = new JButton("OPEN");
-		JPanel p = new JPanel();
-		p.add(button);
-		l = new JLabel("No folder selected");
-		p.add(l);
-		f.add(p);
-		button.addActionListener(new ActionListener() {			
-
+		public void setupGUI() {
+	        f = new JFrame("GUI");
+	        f.setSize(1000, 750);
+	        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        f.setLayout(new BorderLayout());
+	        jp1.setLayout(new BorderLayout());
+	        JButton button = new JButton("OPEN");
+	        jp.add(button);
+	        l = new JLabel("No folder selected");
+	        jp.add(l);
+	        l1 = new JLabel("Is_GOD_Class Rule");
+	        jp1.add(l1);
+	        f.add(jp, BorderLayout.NORTH);
+	        f.add(jp1, BorderLayout.CENTER);
+	        jp1.add(jp2, BorderLayout.NORTH);
+	        jp1.add(jp3, BorderLayout.CENTER);
+	        jp2.add(jcb);
+	        jp2.add(jf);
+	        jp2.add(jcb2);
+	        jp2.add(jcb1);
+	        jp2.add(jf1);
+	        jp3.add(jcb3);
+	        jp3.add(jf2);
+	        jp3.add(jcb5);
+	        jp3.add(jcb4);
+	        jp3.add(jf3);
+	        button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				String command= evt.getActionCommand();
@@ -166,8 +203,8 @@ public class Metricas_Metodos {
 	}
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		//     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
-		// File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
-			File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		 File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
+			//File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
 		//	File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
 		Metricas_Metodos mm = new Metricas_Metodos(2);
 		mm.analyze(file);
