@@ -49,6 +49,7 @@ public class Metricas_Metodos {
 	private JFrame f= new JFrame();
 	private JLabel l= new JLabel();
 	private JFileChooser j;
+	private ArrayList<File> ficheiros= new ArrayList<>();
 
 	public Metricas_Metodos(int j) {
 		super();
@@ -75,6 +76,7 @@ public class Metricas_Metodos {
 		}.visit(cu, null);
 
 	}
+	
 
 	public void analyzeCyclometicComplexity (File file) throws FileNotFoundException {
 		InputStream is = new FileInputStream(file);
@@ -111,7 +113,23 @@ public class Metricas_Metodos {
 	public ArrayList<ArrayList<String>> getAl() {
 		return al;
 	}
-
+	
+	public ArrayList<File> search(File main){
+		File[] files = main.listFiles();
+		for (File file : files) {
+			if(file.isDirectory() ) {
+				this.search(file);
+			}
+			if(file.isFile()&&file.getAbsolutePath().endsWith(".java")) {
+				ficheiros.add(file);
+				//for (File x: ficheiros) {
+					//System.out.println(x.getName());
+				//}
+			}
+			
+		}
+		return ficheiros;
+	}
 	public void setupGUI() {
 		f = new JFrame("GUI");
 		f.setSize(400, 400);                                                       
@@ -130,11 +148,14 @@ public class Metricas_Metodos {
 				l.setText("the user cancelled the operation");
 				if (command.equals("OPEN")) {
 					j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+					j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					int r = j.showOpenDialog(null);
 					if (r == JFileChooser.APPROVE_OPTION) {
 						l.setText(j.getSelectedFile().getAbsolutePath());
-						String s = j.getSelectedFile().getAbsolutePath();
-						System.out.println(s);
+						File mainDir = j.getSelectedFile();
+						String path = j.getSelectedFile().getAbsolutePath();
+						ArrayList<File> files = search(mainDir);
+						System.out.println(path);
 					}
 					else
 						l.setText("the user cancelled the operation");
@@ -145,8 +166,8 @@ public class Metricas_Metodos {
 	}
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		//     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
-		File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
-		// 	File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		// File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
+			File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
 		//	File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
 		Metricas_Metodos mm = new Metricas_Metodos(2);
 		mm.analyze(file);
