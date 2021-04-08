@@ -52,6 +52,7 @@ public class Metricas_Metodos {
 	private int wmc;
 	private int loc_class;
 	private JFrame f= new JFrame();
+	private JFrame f1= new JFrame();
 	private JLabel l= new JLabel();
 	private JLabel l1= new JLabel();
 	private JFileChooser j;
@@ -71,6 +72,8 @@ public class Metricas_Metodos {
     JPanel jp1= new JPanel();
     JPanel jp2= new JPanel();
     JPanel jp3= new JPanel();
+    JPanel jp4= new JPanel();
+ 
 	private ArrayList<File> ficheiros= new ArrayList<>();
 
 	public Metricas_Metodos(int j) {
@@ -156,26 +159,14 @@ public class Metricas_Metodos {
 	        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        f.setLayout(new BorderLayout());
 	        jp1.setLayout(new BorderLayout());
+	        f.add(jp, BorderLayout.NORTH);
 	        JButton button = new JButton("OPEN");
 	        jp.add(button);
 	        l = new JLabel("No folder selected");
 	        jp.add(l);
-	        l1 = new JLabel("Is_GOD_Class Rule");
-	        jp1.add(l1);
-	        f.add(jp, BorderLayout.NORTH);
-	        f.add(jp1, BorderLayout.CENTER);
-	        jp1.add(jp2, BorderLayout.NORTH);
-	        jp1.add(jp3, BorderLayout.CENTER);
-	        jp2.add(jcb);
-	        jp2.add(jf);
-	        jp2.add(jcb2);
-	        jp2.add(jcb1);
-	        jp2.add(jf1);
-	        jp3.add(jcb3);
-	        jp3.add(jf2);
-	        jp3.add(jcb5);
-	        jp3.add(jcb4);
-	        jp3.add(jf3);
+//	        l1 = new JLabel("Is_GOD_Class Rule");
+//	        jp1.add(l1);
+	        
 	        button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -191,6 +182,33 @@ public class Metricas_Metodos {
 						String path = j.getSelectedFile().getAbsolutePath();
 						ArrayList<File> files = search(mainDir);
 						System.out.println(path);
+						f1 = new JFrame("Rules");
+				        f1.setSize(500, 375);
+				        f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				        f1.setLayout(new BorderLayout());
+				        f1.add(jp1, BorderLayout.CENTER);
+				        jp1.add(jp2, BorderLayout.NORTH);
+				        jp1.add(jp3, BorderLayout.CENTER);
+				        f1.add(jp4, BorderLayout.SOUTH);
+				        JButton button1 = new JButton("RUN");
+				        jp4.add(button1);
+				        jp2.add(jcb);
+				        jp2.add(jf);
+				        jp2.add(jcb2);
+				        jp2.add(jcb1);
+				        jp2.add(jf1);
+				        jp3.add(jcb3);
+				        jp3.add(jf2);
+				        jp3.add(jcb5);
+				        jp3.add(jcb4);
+				        jp3.add(jf3);
+//				        l1 = new JLabel("Is_GOD_Class Rule");
+//				        jp1.add(l1);
+//				        jp1.add(l1, BorderLayout.SOUTH);
+				        f1.setVisible(true);
+						f1.show();
+						
+
 					}
 					else
 						l.setText("the user cancelled the operation");
@@ -204,7 +222,7 @@ public class Metricas_Metodos {
 		//     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
 		// File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
 			//File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-			File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
+			File file = new File("/Users/guilhenriques/Desktop/Faculdade/ES_Projeto Teste/src/com/jasml/compiler/ParsingException.java");
 		Metricas_Metodos mm = new Metricas_Metodos(2);
 		mm.analyze(file);
 		mm.analyzeCyclometicComplexity(file);
