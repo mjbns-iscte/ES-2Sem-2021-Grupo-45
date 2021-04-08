@@ -144,14 +144,12 @@ public class Metricas_Metodos {
 			}
 			if(file.isFile()&&file.getAbsolutePath().endsWith(".java")) {
 				ficheiros.add(file);
-				//for (File x: ficheiros) {
-					//System.out.println(x.getName());
-				//}
 			}
 			
 		}
 		return ficheiros;
 	}
+	
 		public void setupGUI() {
 	        f = new JFrame("GUI");
 	        f.setSize(1000, 750);
@@ -201,11 +199,12 @@ public class Metricas_Metodos {
 
 		});
 	}
+		
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		//     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
-		 File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
+		// File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
 			//File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-		//	File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
+			File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
 		Metricas_Metodos mm = new Metricas_Metodos(2);
 		mm.analyze(file);
 		mm.analyzeCyclometicComplexity(file);
@@ -223,6 +222,7 @@ public class Metricas_Metodos {
 		System.out.println("A classe tem " +  mm.getLoc_class() + " linhas de código.");
 
 	}
+	
 
 
 
