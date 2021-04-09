@@ -208,7 +208,7 @@ public class Metricas_Metodos {
 				        f1.setVisible(true);
 						f1.show();
 						
-
+ 
 					}
 					else
 						l.setText("the user cancelled the operation");
