@@ -14,20 +14,24 @@ import org.junit.jupiter.api.Test;
 class Metricas_MetodosTest {
 	static Metricas_Metodos mm;
 	static File file;
+	static File path;
 	private LOC_methodTest loc = new LOC_methodTest();
 	private Cyclo_methodTest cic = new Cyclo_methodTest();
 	static HashMap<String, Integer> map;
 	static int loc_class;
 	static int nom_class;
 	static int wmc_class;
+	static ArrayList<File> files;
 	
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		mm = new Metricas_Metodos(2);
         file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
+        path= new File("C:\\Users\\migue\\Documents\\Projeto\\src");
         mm.analyze(file);
         mm.analyzeCyclometicComplexity(file);
+        files= mm.search(path);
         
 	}
 
@@ -58,8 +62,6 @@ class Metricas_MetodosTest {
 		assertNotNull(al.get(1));
 		assertEquals(6,al.get(1).size());
 		
-		
-		//loc.testVisit();
 	}
 	
 	@Test
@@ -74,10 +76,14 @@ class Metricas_MetodosTest {
 		
 		assertEquals(6, h.size());
 		assertEquals(11, wmc_class);
+	}
+	
+
+	@Test
+	final void testSearch() {
+		assertNotNull(path.listFiles());
+		assertEquals(43,files.size());
 		
-		//assertThrows(FileNotFoundException.this, () ->  )
-		
-		//cic.testCyclo_method();
 	}
 	
 
