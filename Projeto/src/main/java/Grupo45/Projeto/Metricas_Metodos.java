@@ -7,6 +7,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.w3c.dom.traversal.NodeIterator;
 
 import com.github.javaparser.ParseException;
@@ -28,6 +32,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
@@ -36,6 +41,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileSystemView;
 
@@ -153,94 +160,137 @@ public class Metricas_Metodos {
 		return ficheiros;
 	}
 	
-		public void setupGUI() {
-	        f = new JFrame("GUI");
+		public void setupGUI() throws IOException {
+			String[] columnNames = {"MethodID","package","class","method","NOM_class","LOC_class","WMC_class","is_God_Class","LOC_method","CYCLO_method","is_Long_Method"};
+	       
+			f = new JFrame("GUI");
 	        f.setSize(1000, 750);
 	        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        f.setLayout(new BorderLayout());
 	        jp1.setLayout(new BorderLayout());
 	        f.add(jp, BorderLayout.NORTH);
 	        JButton button = new JButton("OPEN");
-	        jp.add(button);
+	        jp.setLayout(new BorderLayout());
+	        jp.add(button, BorderLayout.NORTH);
 	        l = new JLabel("No folder selected");
 	        jp.add(l);
 //	        l1 = new JLabel("Is_GOD_Class Rule");
 //	        jp1.add(l1);
 	        
-	        button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				String command= evt.getActionCommand();
-				l.setText("the user cancelled the operation");
-				if (command.equals("OPEN")) {
-					j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-					j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-					int r = j.showOpenDialog(null);
-					if (r == JFileChooser.APPROVE_OPTION) {
-						l.setText(j.getSelectedFile().getAbsolutePath());
-						File mainDir = j.getSelectedFile();
-						String path = j.getSelectedFile().getAbsolutePath();
-						ArrayList<File> files = search(mainDir);
-						System.out.println(path);
-						f1 = new JFrame("Rules");
-				        f1.setSize(500, 375);
-				        f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				        f1.setLayout(new BorderLayout());
-				        f1.add(jp1, BorderLayout.CENTER);
-				        jp1.add(jp2, BorderLayout.NORTH);
-				        jp1.add(jp3, BorderLayout.CENTER);
-				        f1.add(jp4, BorderLayout.SOUTH);
-				        JButton button1 = new JButton("RUN");
-				        jp4.add(button1);
-				        jp2.add(jcb);
-				        jp2.add(jf);
-				        jp2.add(jcb2);
-				        jp2.add(jcb1);
-				        jp2.add(jf1);
-				        jp3.add(jcb3);
-				        jp3.add(jf2);
-				        jp3.add(jcb5);
-				        jp3.add(jcb4);
-				        jp3.add(jf3);
-//				        l1 = new JLabel("Is_GOD_Class Rule");
-//				        jp1.add(l1);
-//				        jp1.add(l1, BorderLayout.SOUTH);
-				        f1.setVisible(true);
-						f1.show();
-						
- 
-					}
-					else
-						l.setText("the user cancelled the operation");
-				}
-			}
+	        File file = new File("teste_metricas.xlsx");
+	        FileInputStream is = new FileInputStream(file);
+	        Workbook w = new XSSFWorkbook(is);
+	        org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
+	        Iterator<Row> it = sheet.iterator();
+	        
+	        String[][] matriz = new String[sheet.getLastRowNum()][sheet.getRow(0).getLastCellNum()];
+	        Row row;
+	        it.next();
+	        for(int i = 0; it.hasNext();i++) {
+	        	row = it.next();
+	        	Iterator<Cell> itcell= row.cellIterator();
+	        	
+	        	for(int j = 0; itcell.hasNext(); j++ ) {
+	        		Cell cell = itcell.next();
+	        		String aux;
+	        		if(cell.toString().isEmpty()) {
+	        			aux = "empty";
+	        		}
+	        		aux = cell.toString();
+	        		matriz[i][j] = aux;
+	        	}
+	        }
 
-		});
-	}
-		
+	        for(int x = 0; x!= sheet.getLastRowNum(); x++) {
+	        	for (int y = 0; y!= sheet.getRow(0).getLastCellNum(); y++) {
+	        		System.out.println(matriz[x][y]);
+	        	}
+	        }
+
+	        JTable table = new JTable(matriz, columnNames);
+	        jp.add(table, BorderLayout.SOUTH);
+	        jp.add(new JScrollPane(table));
+	        is.close();
+	        w.close();
+
+	        button.addActionListener(new ActionListener() {
+	        	@Override
+	        	public void actionPerformed(ActionEvent evt) {
+	        		String command= evt.getActionCommand();
+	        		l.setText("the user cancelled the operation");
+	        		if (command.equals("OPEN")) {
+	        			j = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+	        			j.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	        			int r = j.showOpenDialog(null);
+	        			if (r == JFileChooser.APPROVE_OPTION) {
+	        				l.setText(j.getSelectedFile().getAbsolutePath());
+	        				File mainDir = j.getSelectedFile();
+	        				String path = j.getSelectedFile().getAbsolutePath();
+	        				ArrayList<File> files = search(mainDir);
+	        				System.out.println(path);
+	        				f1 = new JFrame("Rules");
+	        				f1.setSize(500, 375);
+	        				f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        				f1.setLayout(new BorderLayout());
+	        				f1.add(jp1, BorderLayout.CENTER);
+	        				jp1.add(jp2, BorderLayout.NORTH);
+	        				jp1.add(jp3, BorderLayout.CENTER);
+	        				f1.add(jp4, BorderLayout.SOUTH);
+	        				JButton button1 = new JButton("RUN");
+	        				jp4.add(button1);
+	        				jp2.add(jcb);
+	        				jp2.add(jf);
+	        				jp2.add(jcb2);
+	        				jp2.add(jcb1);
+	        				jp2.add(jf1);
+	        				jp3.add(jcb3);
+	        				jp3.add(jf2);
+	        				jp3.add(jcb5);
+	        				jp3.add(jcb4);
+	        				jp3.add(jf3);
+	        				//l1 = new JLabel("Is_GOD_Class Rule");
+	        				//jp1.add(l1);
+	        				//jp1.add(l1, BorderLayout.SOUTH);
+	        				f1.setVisible(true);
+	        				f1.show();
+
+
+	        			}
+	        			else
+	        				l.setText("the user cancelled the operation");
+	        		}
+	        	}
+
+	        });
+		}
+
 	public static void main(String[] args) throws FileNotFoundException, Exception {
-		//     File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
-		// File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
-			//File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-			File file = new File("/Users/guilhenriques/Desktop/Faculdade/ES_Projeto Teste/src/com/jasml/compiler/ParsingException.java");
+		//File file = new File("C://jasml//src//com//jasml//compiler//SourceCodeParser.java");
+		//File file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\jasml.java"); 
+		//File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+//		File file = new File("/Users/guilhenriques/Desktop/Faculdade/ES_Projeto Teste/src/com/jasml/compiler/ParsingException.java");
+		//File file = new File("C:\\Users\\Francisco\\git\\ES-2Sem-2021-Grupo-45\\Projeto\\src\\main\\java\\src");
+
 		Metricas_Metodos mm = new Metricas_Metodos(2);
-		mm.analyze(file);
-		mm.analyzeCyclometicComplexity(file);
+		//mm.analyze(file);
+		//mm.analyzeCyclometicComplexity(file);
+		//Excel e = new Excel();
+		//e.setupExcel("teste");
 		mm.setupGUI();    
 		mm.f.setVisible(true);
 		mm.f.show();
-		for(int i=0;i!=mm.al.get(0).size();i++) {
-			System.out.println(mm.al.get(0).get(i));
-			String aux= mm.al.get(0).get(i);
-			System.out.println(mm.al.get(1).get(i));
-			System.out.println(mm.getMap().get(aux));
-		}
-		System.out.println("A classe tem " +  mm.getWmc() + " de complexidade ciclomática.");
-		System.out.println("A classe tem " +  mm.getNom_class() + " metodos.");
-		System.out.println("A classe tem " +  mm.getLoc_class() + " linhas de código.");
-
+//		for(int i=0;i!=mm.al.get(0).size();i++) {
+//			System.out.println(mm.al.get(0).get(i));
+//			String aux= mm.al.get(0).get(i);
+//			System.out.println(mm.al.get(1).get(i));
+//			System.out.println(mm.getMap().get(aux));
+//		}
+//		System.out.println("A classe tem " +  mm.getWmc() + " de complexidade ciclomática.");
+//		System.out.println("A classe tem " +  mm.getNom_class() + " metodos.");
+//		System.out.println("A classe tem " +  mm.getLoc_class() + " linhas de código.");
+//
 	}
-	
+
 
 
 
