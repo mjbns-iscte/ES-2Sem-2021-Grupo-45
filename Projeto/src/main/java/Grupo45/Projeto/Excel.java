@@ -19,10 +19,11 @@ public class Excel {
 
 	private static String[] columns = {"MethodID","package","class","method","NOM_class","LOC_class","WMC_class","is_God_Class","LOC_method","CYCLO_method","is_Long_Method"};
 	private org.apache.poi.ss.usermodel.Sheet s;
+	private String g_path;
 	
 	public void setupExcel(String path) throws IOException {
 		Workbook w = new XSSFWorkbook();
-		String g_path = path + "_metricas.xlsx";
+		 g_path = path + "_metricas.xlsx";
 		
 		s = w.createSheet("METRICAS");
 		
@@ -50,7 +51,13 @@ public class Excel {
 		w.write(fileOut);
 		fileOut.close();
 		
+		
 	}
+	
+	public String getG_path() {
+		return g_path;
+	}
+
 	public org.apache.poi.ss.usermodel.Sheet getSheet(){
 		return s;
 	}
