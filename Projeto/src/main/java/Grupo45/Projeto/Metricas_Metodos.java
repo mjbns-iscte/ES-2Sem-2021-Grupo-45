@@ -125,9 +125,10 @@ public class Metricas_Metodos {
 	}
 
 
-	public void metricsToExcel(ArrayList<File> files, Excel e) throws IOException {
+	public Excel metricsToExcel(ArrayList<File> files, Excel e) throws IOException {
+		String name = e.getG_path();
 //		org.apache.poi.ss.usermodel.Sheet sheet=e.getSheet();
-		FileInputStream file = new FileInputStream("C:\\Users\\tiago\\git\\ES-2Sem-2021-Grupo-45\\Projeto\\teste_metricas.xlsx");
+		FileInputStream file = new FileInputStream(name);
 		
 		Workbook w = new XSSFWorkbook(file);
 		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
@@ -159,11 +160,11 @@ public class Metricas_Metodos {
 		}
 		System.out.println(getAl().get(1).size());
 
-		FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\tiago\\git\\ES-2Sem-2021-Grupo-45\\Projeto\\teste_metricas.xlsx"));
+		FileOutputStream fileOut = new FileOutputStream(new File(name));
 		w.write(fileOut);
 		fileOut.close();
 		
-		
+		return e;
 	}
 	
 	private ArrayList<File> ficheiros = new ArrayList<File>();
@@ -182,12 +183,12 @@ public class Metricas_Metodos {
     }
 	
     public static void main(String[] args) throws FileNotFoundException, Exception {
-        File file = new File("C:\\jasml\\src");
+     //   File file = new File("C:\\jasml\\src");
    // 	  File file = new File("C:\\Users\\jtfgb\\OneDrive - ISCTE-IUL\\Documentos\\ES_Projeto Teste\\src\\com\\jasml\\compiler\\SourceCodeParser.java"); 
-   // 	File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+    	File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src");
 //    	File file = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\ParsingException.java");
     	Excel e = new Excel();
-    	e.setupExcel("teste");
+    	e.setupExcel("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\ola");
     	Metricas_Metodos mm = new Metricas_Metodos(2);
     	
     	mm.metricsToExcel(mm.search(file), e);
