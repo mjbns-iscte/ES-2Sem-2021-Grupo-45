@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -72,18 +73,28 @@ public class Metricas_Metodos {
 	private JLabel l= new JLabel();
 	private JLabel l1= new JLabel();
 	private JFileChooser j;
-	private String[] options= new String[]{"LOC_method","Cyclo_method","NOM_class","WMC_class"};
-	private String[] metodos= new String[]{"AND","OR"};
-	private JComboBox jcb = new JComboBox(metodos);
-    private JComboBox jcb1 = new JComboBox(metodos);
-    private JComboBox jcb2 = new JComboBox(options);
-    private JComboBox jcb3 = new JComboBox(metodos);
-    private JComboBox jcb4 = new JComboBox(metodos);
-    private JComboBox jcb5 = new JComboBox(options);
-    private JTextField jf= new JTextField("Number");
-    private JTextField jf1= new JTextField("Number");
-    private JTextField jf2= new JTextField("Number");
-    private JTextField jf3= new JTextField("Number");
+	private String[] metodos= new String[]{"LOC_method","Cyclo_method","NOM_class","WMC_class"};
+	private String[] options= new String[]{"AND","OR"};
+	private String[] sinais = new String[]{">","<",">=","<=","="};
+	
+	private JComboBox method1 = new JComboBox(metodos);
+    private JComboBox method2 = new JComboBox(metodos);
+    private JComboBox method3 = new JComboBox(metodos);
+    private JComboBox method4 = new JComboBox(metodos); 
+    
+    private JComboBox option2 = new JComboBox(options);
+    private JComboBox option1 = new JComboBox(options);
+    
+    private JComboBox sinal1 = new JComboBox(sinais);
+    private JComboBox sinal2 = new JComboBox(sinais);
+    private JComboBox sinal3 = new JComboBox(sinais);
+    private JComboBox sinal4 = new JComboBox(sinais);
+    
+    private JTextField text1= new JTextField(2);
+    private JTextField text2= new JTextField(2);
+    private JTextField text3= new JTextField(2);
+    private JTextField text4= new JTextField(2);
+    
     JPanel jp= new JPanel();
     JPanel jp1= new JPanel();
     JPanel jp2= new JPanel();
@@ -200,45 +211,45 @@ public class Metricas_Metodos {
 //	        l1 = new JLabel("Is_GOD_Class Rule");
 //	        jp1.add(l1);
 	        
-	        File file = new File("teste_metricas.xlsx");
-	        FileInputStream is = new FileInputStream(file);
-	        Workbook w = new XSSFWorkbook(is);
-	        org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
-	        Iterator<Row> it = sheet.iterator();
-	        
-	        String[][] matriz = new String[sheet.getLastRowNum()][sheet.getRow(0).getLastCellNum()];
-	        Row row;
-	        it.next();
-	        for(int i = 0; it.hasNext();i++) {
-	        	row = it.next();
-	        	Iterator<Cell> itcell= row.cellIterator();
-	        	
-	        	for(int j = 0; itcell.hasNext(); j++ ) {
-	        		Cell cell = itcell.next();
-	        		String aux;
-	        		if(cell.toString().isEmpty()) {
-	        			aux = "empty";
-	        		}
-	        		aux = cell.toString();
-	        		matriz[i][j] = aux;
-	        	}
-	        }
-
-	        for(int x = 0; x!= sheet.getLastRowNum(); x++) {
-	        	for (int y = 0; y!= sheet.getRow(0).getLastCellNum(); y++) {
-	        		System.out.println(matriz[x][y]);
-	        	}
-	        }
-
-	        JTable table = new JTable(matriz, columnNames);
-	        jp.add(table, BorderLayout.SOUTH);
-	        jp.add(new JScrollPane(table));
-	        is.close();
-	        w.close();
+//	        File file = new File("teste_metricas.xlsx");
+//	        FileInputStream is = new FileInputStream(file);
+//	        Workbook w = new XSSFWorkbook(is);
+//	        org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
+//	        Iterator<Row> it = sheet.iterator();
+//	        
+//	        String[][] matriz = new String[sheet.getLastRowNum()][sheet.getRow(0).getLastCellNum()];
+//	        Row row;
+//	        it.next();
+//	        for(int i = 0; it.hasNext();i++) {
+//	        	row = it.next();
+//	        	Iterator<Cell> itcell= row.cellIterator();
+//	        	
+//	        	for(int j = 0; itcell.hasNext(); j++ ) {
+//	        		Cell cell = itcell.next();
+//	        		String aux;
+//	        		if(cell.toString().isEmpty()) {
+//	        			aux = "empty";
+//	        		}
+//	        		aux = cell.toString();
+//	        		matriz[i][j] = aux;
+//	        	}
+//	        }
+//
+//	        for(int x = 0; x!= sheet.getLastRowNum(); x++) {
+//	        	for (int y = 0; y!= sheet.getRow(0).getLastCellNum(); y++) {
+//	        		System.out.println(matriz[x][y]);
+//	        	}
+//	        }
+//
+//	        JTable table = new JTable(matriz, columnNames);
+//	        jp.add(table, BorderLayout.SOUTH);
+//	        jp.add(new JScrollPane(table));
+//	        is.close();
+//	        w.close();
 
 	        button.addActionListener(new ActionListener() {
 	        	@Override
-	        	public void actionPerformed(ActionEvent evt) {
+	        	public void actionPerformed(ActionEvent evt)  {
 	        		String command= evt.getActionCommand();
 	        		l.setText("the user cancelled the operation");
 	        		if (command.equals("OPEN")) {
@@ -250,7 +261,54 @@ public class Metricas_Metodos {
 	        				File mainDir = j.getSelectedFile();
 	        				String path = j.getSelectedFile().getAbsolutePath();
 	        				ArrayList<File> files = search(mainDir);
-	        				System.out.println(path);
+	        				Path pathToAFile = Paths.get(path);
+	        				System.out.println("Path :" + path);
+	        				
+	/////////////////////////        				/////////////////////////
+	        				try {
+		        	
+
+	        				File file = new File(pathToAFile.getFileName().toString() + "_metricas.xlsx");
+	        		        FileInputStream is = new FileInputStream(file);
+	        		        Workbook w = new XSSFWorkbook(is);
+	        		        org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
+	        		        Iterator<Row> it = sheet.iterator();
+	        		        
+	        		        String[][] matriz = new String[sheet.getLastRowNum()][sheet.getRow(0).getLastCellNum()];
+	        		        Row row;
+	        		        it.next();
+	        		        for(int i = 0; it.hasNext();i++) {
+	        		        	row = it.next();
+	        		        	Iterator<Cell> itcell= row.cellIterator();
+	        		        	
+	        		        	for(int j = 0; itcell.hasNext(); j++ ) {
+	        		        		Cell cell = itcell.next();
+	        		        		String aux;
+	        		        		if(cell.toString().isEmpty()) {
+	        		        			aux = "empty";
+	        		        		}
+	        		        		aux = cell.toString();
+	        		        		matriz[i][j] = aux;
+	        		        	}
+	        		        }
+
+	        		        for(int x = 0; x!= sheet.getLastRowNum(); x++) {
+	        		        	for (int y = 0; y!= sheet.getRow(0).getLastCellNum(); y++) {
+	        		        		System.out.println(matriz[x][y]);
+	        		        	}
+	        		        }
+
+	        		        JTable table = new JTable(matriz, columnNames);
+	        		        jp.add(table, BorderLayout.SOUTH);
+	        		        jp.add(new JScrollPane(table));
+	        		        is.close();
+	        		        w.close();
+	        				}catch(IOException e) {
+	        					e.printStackTrace();
+	        				}
+	        				
+/////////////////////////        				/////////////////////////        				
+	        				
 	        				f1 = new JFrame("Rules");
 	        				f1.setSize(500, 375);
 	        				f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -261,23 +319,38 @@ public class Metricas_Metodos {
 	        				f1.add(jp4, BorderLayout.SOUTH);
 	        				JButton button1 = new JButton("RUN");
 	        				jp4.add(button1);
-	        				jp2.add(jcb);
-	        				jp2.add(jf);
-	        				jp2.add(jcb2);
-	        				jp2.add(jcb1);
-	        				jp2.add(jf1);
-	        				jp3.add(jcb3);
-	        				jp3.add(jf2);
-	        				jp3.add(jcb5);
-	        				jp3.add(jcb4);
-	        				jp3.add(jf3);
+	        				jp2.add(method1);
+	        				jp2.add(sinal1);
+	        				jp2.add(text1);
+	        				jp2.add(option1);
+	        				jp2.add(method2);
+	        				jp2.add(sinal2);
+	        				jp2.add(text2);
+	        				jp3.add(method3);
+	        				jp3.add(sinal3);
+	        				jp3.add(text3);
+	        				jp3.add(option2);
+	        				jp3.add(method4);
+	        				jp3.add(sinal4);
+	        				jp3.add(text4);
 	        				//l1 = new JLabel("Is_GOD_Class Rule");
 	        				//jp1.add(l1);
 	        				//jp1.add(l1, BorderLayout.SOUTH);
 	        				f1.setVisible(true);
 	        				f1.show();
+	        				
+	        				button1.addActionListener(new ActionListener() { 
+	        					public void actionPerformed(ActionEvent evt2
+	        							)  {
+	        		        		String command= evt.getActionCommand();
+	        		        		l.setText("the user cancelled the operation");
+	        		        		String command2= evt2.getActionCommand();
+	        		        		if (command2.equals("RUN"))
+	        	        				System.out.println((String)method1.getSelectedItem() + sinal1.getSelectedItem() + text1.getText() + option1.getSelectedItem() + method2.getSelectedItem() + sinal2.getSelectedItem() + text2.getText());
+	        		        			System.out.println((String)method3.getSelectedItem() + sinal3.getSelectedItem() + text3.getText() + option2.getSelectedItem() + method4.getSelectedItem() + sinal4.getSelectedItem() + text4.getText());
 
-
+	        					}});
+	        				
 	        			}
 	        			else
 	        				l.setText("the user cancelled the operation");
@@ -332,14 +405,20 @@ public class Metricas_Metodos {
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		// File file = new File("C:\\jasml\\src");
 				// File file = new File("C:\\Users\\jtfgb\\OneDrive-ISCTE-IUL\\Documentos\\ES_Projeto
-				// Teste\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+				 File file = new File("C:\\jasml\\src");
 				// File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-				File file = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
+				//File file = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
 				Excel e = new Excel();
-				e.setupExcel("C:\\Users\\migue\\Documents\\Projeto_ES\\hola");
+//				e.setupExcel("C:\\Users\\migue\\Documents\\Projeto_ES\\hola");
+				e.setupExcel("src"); // devia ter o path completo
+			
 				Metricas_Metodos mm = new Metricas_Metodos(2);
 
 				mm.metricsToExcel(mm.search(file), e);
+				mm.setupGUI();
+				mm.f.setVisible(true);
+				mm.f.show();
+				
 
 	}
 
