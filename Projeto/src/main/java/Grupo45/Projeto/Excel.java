@@ -23,7 +23,7 @@ public class Excel {
 	
 	public void setupExcel(String path) throws IOException {
 		Workbook w = new XSSFWorkbook();
-		 g_path = path + "_metricas.xlsx";
+		 g_path = path;
 		
 		s = w.createSheet("METRICAS");
 		

@@ -251,11 +251,26 @@ public class Metricas_Metodos {
 	        				Path pathToAFile = Paths.get(path);
 	        				System.out.println("Path :" + path);
 	        				
+	        				Excel excel = new Excel();
+	        			
+	        				try {
+	        					System.out.println("yoyo" + path + "\\" + pathToAFile.getFileName().toString() + "_metricas.xlsx");
+								excel.setupExcel(path + "\\" + pathToAFile.getFileName().toString() + "_metricas.xlsx");
+								
+								metricsToExcel(files, excel);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} // devia ter o path completo
+
+	        				
+	        				
 	/////////////////////////        				/////////////////////////
 	        				try {
 		        	
 
-	        				File file = new File(pathToAFile.getFileName().toString() + "_metricas.xlsx");
+	        				File file = new File(path + "\\" + pathToAFile.getFileName().toString() + "_metricas.xlsx");
+	        				System.out.println(file.toString());
 	        		        FileInputStream is = new FileInputStream(file);
 	        		        Workbook w = new XSSFWorkbook(is);
 	        		        org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
@@ -285,7 +300,7 @@ public class Metricas_Metodos {
 	        		        JTable table = new JTable(matriz, columnNames);
 	        		        jp.add(table, BorderLayout.SOUTH);
 	        		        jp.add(new JScrollPane(table));
-	        		        f.setVisible(true);
+	        		      //  f.setVisible(true);
 	        		        is.close();
 	        		        w.close();
 	        				}catch(IOException e) {
@@ -459,21 +474,10 @@ public class Metricas_Metodos {
 		}
 		
 		public static void main(String[] args) throws FileNotFoundException, Exception {
-			// File file = new File("C:\\jasml\\src");
-			// File file = new File("C:\\Users\\jtfgb\\OneDrive-ISCTE-IUL\\Documentos\\ES_Projeto
-			File file = new File("/Users/guilhenriques/Desktop/Faculdade/ES_Projeto Teste/src");
-			// File file = new File("C:\\Users\\Amado\\Desktop\\Gosto muito de programar\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-			//File file = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
-			Excel e = new Excel();
-			//				e.setupExcel("C:\\Users\\migue\\Documents\\Projeto_ES\\hola");
-			e.setupExcel("src"); // devia ter o path completo
-
 			Metricas_Metodos mm = new Metricas_Metodos(2);
-
-			mm.metricsToExcel(mm.search(file), e);
 			mm.setupGUI();
 			mm.f.setVisible(true);
-			mm.f.show();
+		//	mm.f.show();
 
 
 		}
