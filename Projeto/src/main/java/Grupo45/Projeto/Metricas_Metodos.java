@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -390,6 +391,17 @@ public class Metricas_Metodos {
 
 						System.out.println((String)nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem() + text1.getText() + option1.getSelectedItem() + method2.getSelectedItem() + sinal2.getSelectedItem() + text2.getText());
 						//        		        			System.out.println((String)method3.getSelectedItem() + sinal3.getSelectedItem() + text3.getText() + option2.getSelectedItem() + method4.getSelectedItem() + sinal4.getSelectedItem() + text4.getText());
+
+						try {
+							FileWriter f = new FileWriter("Regras.txt");
+							f.write((String)nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem() + text1.getText() + option1.getSelectedItem() + method2.getSelectedItem() + sinal2.getSelectedItem() + text2.getText() + 
+									option2.getSelectedItem() + method3.getSelectedItem() + sinal3.getSelectedItem() + text3.getText());
+							f.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+						
 						updateRules();
 
 					}}});
