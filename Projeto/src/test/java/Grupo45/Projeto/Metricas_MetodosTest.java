@@ -53,7 +53,7 @@ class Metricas_MetodosTest {
 
 	@Test
 	final void testAnalyze() throws Exception {
-		ArrayList<ArrayList<String>> al =mm.getAl();
+		ArrayList<ArrayList<String>> al =mm.getMainArray();
 		//HashMap<String, Integer> h = mm.getMap();
 		int loc_class = mm.getLoc_class();
 		int nom_class = mm.getNom_class();
@@ -73,7 +73,7 @@ class Metricas_MetodosTest {
 	
 	@Test
 	final void testAnalyzeCyclometicComplexity () throws Exception {
-		ArrayList<ArrayList<String>> al =mm.getAl();
+		ArrayList<ArrayList<String>> al =mm.getMainArray();
 		HashMap<String, Integer> h = mm.getMap();
 		int wmc_class = mm.getWmc();
 		
@@ -96,8 +96,8 @@ class Metricas_MetodosTest {
 
 	@Test
 	final void testGetAl() {
-		assertNotNull(mm.getAl());
-		assertEquals(2,mm.getAl().size());
+		assertNotNull(mm.getMainArray());
+		assertEquals(2,mm.getMainArray().size());
 	}
 	
 	@Test

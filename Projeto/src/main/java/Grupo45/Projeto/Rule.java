@@ -57,4 +57,11 @@ public class Rule {
         return out;
     }
 
+    public int getNumberOfConditions() {
+        return conditions.size();
+    }
+    public Condition getCondition(int i) {
+        return conditions.get(i);
+    }
+
 }

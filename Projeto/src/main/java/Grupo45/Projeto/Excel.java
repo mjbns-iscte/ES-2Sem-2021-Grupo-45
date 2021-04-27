@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class Excel {
 
-	private static String[] columns = {"MethodID","package","class","method","NOM_class","LOC_class","WMC_class","is_God_Class","LOC_method","CYCLO_method","is_Long_Method"};
+	private static String[] columns = {"MethodID","package","class","method","NOM_class","LOC_class","WMC_class","LOC_method","CYCLO_method"};
 	private org.apache.poi.ss.usermodel.Sheet s;
 	private String g_path;
 	
@@ -61,5 +61,19 @@ public class Excel {
 	public org.apache.poi.ss.usermodel.Sheet getSheet(){
 		return s;
 	}
+	
+	public int getHeaderSize() {
+		return columns.length;
+	}
+	
+	public int getMetricColumn(String s) {
+		int out =-1;
+		for(int i=0; i!=columns.length;i++) {
+			if(s.equals(columns[i])) out=i;
+		}
+		if (out==-1) throw new IllegalStateException("Input string not found in excel header");
 		
+		return out;
+	}
+	
 }

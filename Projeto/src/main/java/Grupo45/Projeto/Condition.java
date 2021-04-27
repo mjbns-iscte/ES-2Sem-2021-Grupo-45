@@ -30,5 +30,9 @@ public class Condition {
     public String toString() {
         return metric+signal+n;
     }
+    
+    public String getMetric() {
+        return metric;
+    }
 
 }
