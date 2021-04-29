@@ -1,6 +1,9 @@
 package Grupo45.Projeto;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -43,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
@@ -96,25 +100,31 @@ public class Metricas_Metodos {
 	private JComboBox sinal3 = new JComboBox(sinais);
 	private JComboBox sinal4 = new JComboBox(sinais);
 
+	private JComboBox<String> ruleSelect = new JComboBox();
+
 	private JTextField nome= new JTextField(10);
 	private JTextField text1= new JTextField(2);
 	private JTextField text2= new JTextField(2);
 	private JTextField text3= new JTextField(2);
 	private JTextField text4= new JTextField(2);
 
-	JPanel jp= new JPanel();
-	JPanel jp1= new JPanel();
-	JPanel jp2= new JPanel();
-	JPanel jp3= new JPanel();
-	JPanel jp4= new JPanel();
-	JPanel jp5= new JPanel();
-	JPanel jp6= new JPanel();
+	private JPanel jp= new JPanel();
+	private JPanel jp1= new JPanel();
+	private JPanel jp2= new JPanel();
+	private JPanel jp3= new JPanel();
+	private JPanel jp4= new JPanel();
+	private JPanel jp5= new JPanel();
+	private JPanel jp6= new JPanel();
+
+	private JButton button1;
+	private JButton button3;
 
 	JCheckBox cond1 = new JCheckBox("use this condition",false);
 	JCheckBox cond2 = new JCheckBox("use this condition",false);
 
 	private ArrayList<File> ficheiros= new ArrayList<>();
 
+	private Excel excel;
 	public Metricas_Metodos(int j) {
 		super();
 		for(int i=0;i!=j;i++)
@@ -251,17 +261,17 @@ public class Metricas_Metodos {
 						Path pathToAFile = Paths.get(path);
 						System.out.println("Path :" + path);
 
-						Excel excel = new Excel();
-
+						excel = new Excel();
+						String pathExcel=path + "\\" + pathToAFile.getFileName().toString() + "_metricas.xlsx";
 						try {
-							System.out.println("yoyo" + path + "\\" + pathToAFile.getFileName().toString() + "_metricas.xlsx");
-							excel.setupExcel(path + "\\" + pathToAFile.getFileName().toString() + "_metricas.xlsx");
+							System.out.println(pathExcel);
+							excel.setupExcel(pathExcel);
 
 							metricsToExcel(files, excel);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-						} // devia ter o path completo
+						} 
 
 
 
@@ -269,7 +279,7 @@ public class Metricas_Metodos {
 						try {
 
 
-							File file = new File(path + "\\" + pathToAFile.getFileName().toString() + "_metricas.xlsx");
+							File file = new File(pathExcel);
 							System.out.println(file.toString());
 							FileInputStream is = new FileInputStream(file);
 							Workbook w = new XSSFWorkbook(is);
@@ -300,7 +310,7 @@ public class Metricas_Metodos {
 							JTable table = new JTable(matriz, columnNames);
 							jp.add(table, BorderLayout.SOUTH);
 							jp.add(new JScrollPane(table));
-							//  f.setVisible(true);
+							f.setVisible(true);
 							is.close();
 							w.close();
 						}catch(IOException e) {
@@ -312,13 +322,15 @@ public class Metricas_Metodos {
 		});
 
 		/////////////////////////        				/////////////////////////  
+		button1 = new JButton("ADD RULE");
+		button3 = new JButton("APPLY RULE");
 
 		button2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt2)  {
+
 				String command= evt2.getActionCommand();
 				if (command.equals("RULES")) {
-
 					f1 = new JFrame("Rules");
 					f1.setSize(1000, 375);
 					f1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -329,8 +341,10 @@ public class Metricas_Metodos {
 					f1.add(jp4, BorderLayout.SOUTH);
 					jp1.add(jp5, BorderLayout.CENTER);
 					jp1.add(jp6, BorderLayout.CENTER);
-					JButton button1 = new JButton("ADD RULE");
 					jp4.add(button1);
+					jp4.add(ruleSelect);
+					for(Rule r:rules)ruleSelect.addItem(r.toString());
+					jp4.add(button3);
 					jp3.add(new JLabel("Rule Name:"));
 					jp3.add(nome);
 					jp3.add(method1);
@@ -351,86 +365,112 @@ public class Metricas_Metodos {
 					//jp1.add(l1, BorderLayout.SOUTH);
 					f1.setVisible(true);
 					f1.show();
-					createTestRule(); //<------------------------------------
-					
-					
-					button1.addActionListener(new ActionListener() { 
-					
-						public void actionPerformed(ActionEvent evt3
-								)  {
-							String command3= evt3.getActionCommand();
-							System.out.println(command);
-							l.setText("the user cancelled the operation");
-
-							ArrayList<Condition> conditions = new ArrayList<>();
-
-							if (command3.equals("ADD RULE")) {
-
-								if(nome.getText()!="") {
-									Condition c = new Condition(method1.getSelectedItem().toString(),sinal1.getSelectedItem().toString(),Integer.parseInt(text1.getText()));
-									conditions.add(c);
-								}
-								if(cond1.isSelected()) {
-									Condition c1 = new Condition(method2.getSelectedItem().toString(),sinal2.getSelectedItem().toString(),Integer.parseInt(text2.getText()));
-									operators.add(option1.getSelectedItem().toString());
-									conditions.add(c1);
-
-								}
-								if(cond2.isSelected()) {
-									Condition c2 = new Condition(method3.getSelectedItem().toString(),sinal3.getSelectedItem().toString(),Integer.parseInt(text3.getText()));
-									operators.add(option2.getSelectedItem().toString());
-									conditions.add(c2);
-
-								}
-
-								Rule rule = new Rule(nome.getText().toString(),conditions,operators);
-								rules.add(rule);
-
-								System.out.println((String)nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem() + text1.getText() + option1.getSelectedItem() + method2.getSelectedItem() + sinal2.getSelectedItem() + text2.getText());
-								//        		        			System.out.println((String)method3.getSelectedItem() + sinal3.getSelectedItem() + text3.getText() + option2.getSelectedItem() + method4.getSelectedItem() + sinal4.getSelectedItem() + text4.getText());
-
-								try {
-									FileWriter f = new FileWriter("Regras.txt");
-									f.write((String)nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem() + text1.getText() + option1.getSelectedItem() + method2.getSelectedItem() + sinal2.getSelectedItem() + text2.getText() + 
-											option2.getSelectedItem() + method3.getSelectedItem() + sinal3.getSelectedItem() + text3.getText());
-									f.close();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-
-
-								updateRules();
-
-							}}});
-
 				}
 				else
 					l.setText("the user cancelled the operation");
 			}
 		});
+		createTestRule(); //<------------------------------------
 
+		button1.addActionListener(new ActionListener() { 
+
+			public void actionPerformed(ActionEvent evt3
+					)  {
+				String command3= evt3.getActionCommand();
+				System.out.println(command3);
+				l.setText("the user cancelled the operation");
+
+				ArrayList<Condition> conditions = new ArrayList<>();
+
+				if (command3.equals("ADD RULE")) {
+
+					if(nome.getText()!="") {
+						Condition c = new Condition(method1.getSelectedItem().toString(),sinal1.getSelectedItem().toString(),Integer.parseInt(text1.getText()));
+						conditions.add(c);
+					}
+					if(cond1.isSelected()) {
+						Condition c1 = new Condition(method2.getSelectedItem().toString(),sinal2.getSelectedItem().toString(),Integer.parseInt(text2.getText()));
+						operators.add(option1.getSelectedItem().toString());
+						conditions.add(c1);
+
+					}
+					if(cond2.isSelected()) {
+						Condition c2 = new Condition(method3.getSelectedItem().toString(),sinal3.getSelectedItem().toString(),Integer.parseInt(text3.getText()));
+						operators.add(option2.getSelectedItem().toString());
+						conditions.add(c2);
+
+					}
+
+					Rule rule = new Rule(nome.getText().toString(),conditions,operators);
+					rules.add(rule);
+					ruleSelect.addItem(rule.toString());
+					System.out.println((String)nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem() + text1.getText() + option1.getSelectedItem() + method2.getSelectedItem() + sinal2.getSelectedItem() + text2.getText());
+					//        		        			System.out.println((String)method3.getSelectedItem() + sinal3.getSelectedItem() + text3.getText() + option2.getSelectedItem() + method4.getSelectedItem() + sinal4.getSelectedItem() + text4.getText());
+
+					try {
+						FileWriter f = new FileWriter("Regras.txt");
+						f.write((String)nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem() + text1.getText() + option1.getSelectedItem() + method2.getSelectedItem() + sinal2.getSelectedItem() + text2.getText() + 
+								option2.getSelectedItem() + method3.getSelectedItem() + sinal3.getSelectedItem() + text3.getText());
+						f.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					updateRules();
+
+				}
+			}
+		}
+				);button3.addActionListener(new ActionListener() { 
+
+					public void actionPerformed(ActionEvent evt)  {
+						String command= evt.getActionCommand();
+						System.out.println(command);
+						l.setText("the user cancelled the operation");
+
+						ArrayList<Condition> conditions = new ArrayList<>();
+						
+						if (command.equals("APPLY RULE")) {
+							
+							try {
+								LinkedHashSet<String> codeSmells = applyRule(getRuleNamed((String)ruleSelect.getSelectedItem()),excel);
+								JScrollPane jscp = new JScrollPane(new TestPane(codeSmells));																								
+								jp1.add(jscp);
+								jp1.show();
+								f1.setVisible(true);
+								
+							} catch (IOException e) {						
+								e.printStackTrace();
+							}
+
+						}
+					}
+				});
 	}
 
-	public ArrayList<String> applyRule(Rule rule, Excel e) throws IOException{
+	public LinkedHashSet<String> applyRule(Rule rule, Excel e) throws IOException{
 		String name = e.getG_path();
 		FileInputStream file = new FileInputStream(name);		
 		Workbook w = new XSSFWorkbook(file);
 		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
 		ArrayList<Integer> values = new ArrayList<>();
-		ArrayList<String> codeSmells = new ArrayList<>();
-		for(int i=1;i!=getMainArray().get(0).size();i++) {
+		LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
+		Iterator<Row> it = sheet.iterator();
+		it.next();
+		while(it.hasNext()) {
 			values.clear();
-			Row row = sheet.getRow(i);
+			Row row = it.next();
 			for(int j=0;j!=rule.getNumberOfConditions();j++) {
 				System.out.println(rule.getCondition(j).getMetric());
 				System.out.println(e.getMetricColumn(rule.getCondition(j).getMetric()));
-				values.add(Integer.parseInt(row.getCell(e.getMetricColumn(rule.getCondition(j).getMetric())).toString()));
+				values.add((int)Double.parseDouble(row.getCell(e.getMetricColumn(rule.getCondition(j).getMetric())).toString()));
 			}
-			if(!rule.ruleEvaluate(values)) {
-				codeSmells.add(row.getCell(0).toString());
+			if(rule.ruleEvaluate(values)) {
+				if(rule.isClassRule()) {
+					codeSmells.add("Code Smell at Class " + row.getCell(2).toString());
+				}else	codeSmells.add("Code Smell at Method " + row.getCell(0).toString());
 			}
 		}
-
+		w.close();
 		return codeSmells;
 
 
@@ -501,18 +541,44 @@ public class Metricas_Metodos {
 		return rules.get(i);		
 	}
 
+	public Rule getRuleNamed(String s) {
+		Rule out= null;
+		for(int i=0;i!=rules.size();i++) {
+			if(rules.get(i).getRuleName().equals(s))
+				out=rules.get(i);
+		}
+		if(out.equals(null)) throw new IllegalStateException("There is no rule with given name");
+		return out;
+	}
+
+	public class TestPane extends JPanel {
+
+		public TestPane(LinkedHashSet<String> codeSmells) {
+			setLayout(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			for(String s:codeSmells) {       
+				JLabel label = new JLabel(s);              
+				label.setPreferredSize(new Dimension(280, 50));
+				add(label, gbc);               
+			}
+
+		}
+
+	}
+
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		Metricas_Metodos mm = new Metricas_Metodos(2);
 		mm.setupGUI();
 		mm.f.setVisible(true);
-		//	mm.f.show();
-		mm.createTestRule();
-		ArrayList<Integer> values = new ArrayList<>();
-		values.add(9);
-		values.add(6);
-		Excel e = new Excel();
-		e.setupExcel("C:\\jasml\\src\\src_metricas.xlsx");
-		mm.applyRule(mm.getTestRule(0), e);
+		//		mm.f.show();
+		//		mm.createTestRule();
+		//		ArrayList<Integer> values = new ArrayList<>();
+		//		values.add(9);
+		//		values.add(6);
+		//		Excel e = new Excel();
+		//		e.setupExcel("C:\\jasml\\src\\src_metricas.xlsx");
+		//		mm.applyRule(mm.getTestRule(0), e);
 
 	}
 
