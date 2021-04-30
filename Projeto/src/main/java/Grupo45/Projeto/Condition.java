@@ -13,6 +13,14 @@ public class Condition {
         this.signal=signal;
 
     }
+    public Condition(String s) {
+        String[] details = s.split(":");
+
+        this.metric=details[0];
+        this.n=Integer.parseInt(details[2]);
+        this.signal=details[1];
+        
+    } 
     public boolean evaluate(int x) {
         boolean output=false;
 
@@ -28,11 +36,17 @@ public class Condition {
     }
 
     public String toString() {
-        return metric+signal+n;
+        return metric + ":" + signal + ":" + n;
     }
     
     public String getMetric() {
         return metric;
+    }
+    public String getSignal() {
+        return signal;
+    }
+    public String getLimit() {
+        return n + "";
     }
 
 }
