@@ -77,15 +77,6 @@ public class Rule {
     
 
 
-    public boolean isClassRule() {
-    	boolean out = false;
-    	
-    	 for(int i=0;i!=conditions.size();i++) {
-    		 System.out.println(conditions.get(i).getMetric().split("_")[conditions.get(i).getMetric().split("_").length-1].toLowerCase());
-    		 if(conditions.get(i).getMetric().split("_")[conditions.get(i).getMetric().split("_").length-1].equals("class")) out=true;
-    	 }
-    	 return out;
-    }
     
     public int getNumberOfConditions() {
         return conditions.size();
