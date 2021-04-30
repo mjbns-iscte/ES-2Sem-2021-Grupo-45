@@ -80,7 +80,7 @@ public class Metricas_Metodos {
 	private JLabel l= new JLabel();
 	private JLabel l1= new JLabel();
 	private JFileChooser j;
-	private String[] metodos= new String[]{"LOC_method","Cyclo_method","NOM_class","WMC_class"};
+	private String[] metodos= new String[]{"LOC_method","CYCLO_method","LOC_class","NOM_class","WMC_class"};
 	private String[] options= new String[]{"AND","OR"};
 	private String[] sinais = new String[]{">","<",">=","<=","="};
 
@@ -125,12 +125,13 @@ public class Metricas_Metodos {
 	private ArrayList<File> ficheiros= new ArrayList<>();
 
 	private Excel excel;
+
+	private TestPane smells = new TestPane();
+	
 	public Metricas_Metodos(int j) {
 		super();
 		for(int i=0;i!=j;i++)
 			al.add(new ArrayList<String>());
-
-
 	}
 
 	public void analyze(File file) throws FileNotFoundException {
@@ -360,11 +361,11 @@ public class Metricas_Metodos {
 					jp6.add(method3);
 					jp6.add(sinal3);
 					jp6.add(text3);
+					jp1.add(new JScrollPane(smells));
 					//l1 = new JLabel("Is_GOD_Class Rule");
 					//jp1.add(l1);
 					//jp1.add(l1, BorderLayout.SOUTH);
 					f1.setVisible(true);
-					f1.show();
 				}
 				else
 					l.setText("the user cancelled the operation");
@@ -433,9 +434,12 @@ public class Metricas_Metodos {
 							
 							try {
 								LinkedHashSet<String> codeSmells = applyRule(getRuleNamed((String)ruleSelect.getSelectedItem()),excel);
-								JScrollPane jscp = new JScrollPane(new TestPane(codeSmells));																								
-								jp1.add(jscp);
-								jp1.show();
+								smells.removeAll();
+								smells.update(codeSmells);
+								smells.validate();
+//								JScrollPane jscp = new JScrollPane(smells);																								
+//								jp1.add(jscp);
+//								jp1.show();
 								f1.setVisible(true);
 								
 							} catch (IOException e) {						
@@ -447,22 +451,26 @@ public class Metricas_Metodos {
 				});
 	}
 
-	public LinkedHashSet<String> applyRule(Rule rule, Excel e) throws IOException{
-		String name = e.getG_path();
-		FileInputStream file = new FileInputStream(name);		
+public LinkedHashSet<String> applyRule(Rule rule, Excel e) throws IOException{
+		
+		//e.setupExcel(path);
+		FileInputStream file = new FileInputStream(new File(e.getG_path()));		
 		Workbook w = new XSSFWorkbook(file);
-		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
+		System.out.println(w.getActiveSheetIndex());
+		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheet("METRICAS");
 		ArrayList<Integer> values = new ArrayList<>();
-		LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
+//		ArrayList<String> codeSmells = new ArrayList<>();
+		LinkedHashSet<String> codeSmells = new LinkedHashSet<>(); 
 		Iterator<Row> it = sheet.iterator();
 		it.next();
 		while(it.hasNext()) {
 			values.clear();
 			Row row = it.next();
 			for(int j=0;j!=rule.getNumberOfConditions();j++) {
-				System.out.println(rule.getCondition(j).getMetric());
-				System.out.println(e.getMetricColumn(rule.getCondition(j).getMetric()));
+			
+				System.out.println((int)Double.parseDouble(row.getCell(e.getMetricColumn(rule.getCondition(j).getMetric())).toString()));
 				values.add((int)Double.parseDouble(row.getCell(e.getMetricColumn(rule.getCondition(j).getMetric())).toString()));
+				System.out.println(rule.getCondition(j).getMetric()+ " Done");
 			}
 			if(rule.ruleEvaluate(values)) {
 				if(rule.isClassRule()) {
@@ -472,6 +480,7 @@ public class Metricas_Metodos {
 		}
 		w.close();
 		return codeSmells;
+		
 
 
 	}
@@ -501,8 +510,8 @@ public class Metricas_Metodos {
 				row.createCell(4).setCellValue(getNom_class());
 				row.createCell(5).setCellValue(getLoc_class());
 				row.createCell(6).setCellValue(getWmc());
-				row.createCell(8).setCellValue(Integer.parseInt(getMainArray().get(1).get(i)));
-				row.createCell(9).setCellValue(getMap().get(getMainArray().get(0).get(i)));
+				row.createCell(7).setCellValue(Integer.parseInt(getMainArray().get(1).get(i)));
+				row.createCell(8).setCellValue(getMap().get(getMainArray().get(0).get(i)));
 
 
 
@@ -529,7 +538,7 @@ public class Metricas_Metodos {
 		cs.add(a1);
 		//			cs.add(a2);
 		ArrayList<String> ops = new ArrayList<>();
-		ops.add("AND");
+		ops.add("OR");
 		ops.add("OR");
 		Rule rule = new Rule("is_Long_Method",cs,ops);
 		rules.add(rule);
@@ -553,7 +562,7 @@ public class Metricas_Metodos {
 
 	public class TestPane extends JPanel {
 
-		public TestPane(LinkedHashSet<String> codeSmells) {
+		public void update(LinkedHashSet<String> codeSmells) {
 			setLayout(new GridBagLayout());
 			GridBagConstraints gbc = new GridBagConstraints();
 			gbc.gridwidth = GridBagConstraints.REMAINDER;
