@@ -252,23 +252,22 @@ public class Metricas_Metodos {
 	}
 
 
-//	public void createTestRule() {
-//		Condition a = new Condition("LOC_method",">",10);
-//		Condition a1 = new Condition("CYCLO_method",">",5);
-//		//			Condition a2 = new Condition("NOM_Class",">",11);
-//		ArrayList<Condition> cs = new ArrayList<>();
-//		cs.add(a);
-//		cs.add(a1);
-//		//			cs.add(a2);
-//		ArrayList<String> ops = new ArrayList<>();
-//		ops.add("OR");
-//		ops.add("OR");
-//		Rule rule = new Rule("is_Long_Method",cs,ops);
-//		rules.add(rule);
-//
-//		jp2.add(new JLabel("Rules: "));
-//		//		updateRules();
-//	}
+	public void createTestRule() {
+		Condition a = new Condition("LOC_method",">",10);
+		Condition a1 = new Condition("CYCLO_method",">",5);
+		//			Condition a2 = new Condition("NOM_Class",">",11);
+		ArrayList<Condition> cs = new ArrayList<>();
+		cs.add(a);
+		cs.add(a1);
+		//			cs.add(a2);
+		ArrayList<String> ops = new ArrayList<>();
+		ops.add("OR");
+		ops.add("OR");
+		Rule rule = new Rule("is_Long_Method",cs,ops);
+		rules.add(rule);
+	}
+	
+	
 	public Rule getTestRule(int i) {			
 		return rules.get(i);		
 	}
