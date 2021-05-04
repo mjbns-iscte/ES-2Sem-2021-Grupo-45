@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -90,7 +91,7 @@ public class GUI {
 			"LOC_method", "CYCLO_method" };
 
 	private Excel excel;
-
+	private Graph graph = new Graph();
 	private TestPane smells = new TestPane();
 
 	Metricas_Metodos mm;
@@ -336,6 +337,7 @@ public class GUI {
 
 						f1.setVisible(true);
 
+						generateCodeSmellsQuality(codeSmells,mm.getRuleNamed((String) ruleSelect.getSelectedItem()));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -443,6 +445,53 @@ public class GUI {
 				}
 			}
 		});
+	}
+	
+	public void generateCodeSmellsQuality(LinkedHashSet<String> codeSmells,Rule rule) throws IOException {
+		File file = new File("Code_Smells.xlsx");
+		FileInputStream is = new FileInputStream(file);
+		Workbook w = new XSSFWorkbook(is);
+		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
+		Iterator<Row> it = sheet.iterator();
+
+		ArrayList<Boolean> check = new ArrayList<>();
+		it.next();
+		int tp=0,tn=0,fp=0,fn=0; //true positive, true negative, false positive, false negative
+		while( it.hasNext()) {
+			Row row = it.next();
+			Cell cell;
+//TODO
+			if(rule.isClassRule()) {
+				cell = row.getCell(7);
+			}else {
+				cell = row.getCell(10);
+			}
+
+//			check.add(cell.getStringCellValue());
+			if(cell.getCellType().equals(CellType.BOOLEAN)) {
+			check.add(cell.getBooleanCellValue());
+			}
+		}
+		for(int i =0;i!=check.size();i++) {//i=0 é a linha 2
+			System.out.println(i + " " + check.get(i)); 
+		}
+		for(String s :codeSmells) { //os ids que estao no codeSmells são os true
+									//tem de ser um botao porque só vai ser utilizado para as regras god-class e long-method
+			System.out.println(check.get((int)Double.parseDouble(s.split(" ")[s.length()-1])-2));  //linha 485
+			boolean b=check.get(Integer.parseInt(s)-2) == true;
+			if(b) {
+				tp++;				
+			}else {fp++;
+			
+			}
+			
+			
+		}
+		graph.createGraph(tp,tn,fp,fn);
+		
+		f1.setVisible(true);
+		is.close();
+		w.close();
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
