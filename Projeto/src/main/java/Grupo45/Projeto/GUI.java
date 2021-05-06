@@ -111,7 +111,6 @@ public class GUI {
 		f.setLayout(new BorderLayout());
 		jp1.setLayout(new BoxLayout(jp1, BoxLayout.PAGE_AXIS));
 		jp.setLayout(new BorderLayout());
-		// jp.add(button, BorderLayout.NORTH);
 		f.add(jp, BorderLayout.NORTH);
 		f.add(button2, BorderLayout.SOUTH);
 
@@ -130,7 +129,6 @@ public class GUI {
 		addDeleteButton();
 		addExitAction();
 		addCheckCodeSmells();
-
 	}
 
 	public void addOpenButton() {
@@ -281,7 +279,6 @@ public class GUI {
 				ArrayList<Condition> conditions = new ArrayList<>();
 
 				if (command3.equals("SAVE RULE")) {
-
 					ArrayList<String> operators = new ArrayList<>();
 
 					if (nome.getText() != "") {
@@ -301,7 +298,6 @@ public class GUI {
 								sinal3.getSelectedItem().toString(), Integer.parseInt(text3.getText()));
 						operators.add(option2.getSelectedItem().toString());
 						conditions.add(c2);
-
 					}
 
 					Rule rule = new Rule(nome.getText().toString(), conditions, operators);
@@ -326,7 +322,6 @@ public class GUI {
 					resetJPanel(jp3);
 					resetJPanel(jp5);
 					resetJPanel(jp6);
-
 				}
 			}
 		});
@@ -485,7 +480,6 @@ public class GUI {
 				} else {
 					nf++;
 				}
-
 				if (b) {
 					tp++;
 				} else {
@@ -555,13 +549,11 @@ public class GUI {
 		for (Map.Entry<String, Boolean> cursor : islong.entrySet()) {
 			System.out.println(cursor.getKey() + " " + cursor.getValue());
 		}
-
+		w.close();
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
 		GUI gui = new GUI();
 		gui.f.setVisible(true);
-
 	}
-
 }

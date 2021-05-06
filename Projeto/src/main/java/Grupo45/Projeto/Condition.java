@@ -3,8 +3,7 @@ package Grupo45.Projeto;
 public class Condition {
 
     private String metric;
-
-    String signal;
+    private String signal;
     private int n;
 
     public Condition(String metric,String signal,int n) {
