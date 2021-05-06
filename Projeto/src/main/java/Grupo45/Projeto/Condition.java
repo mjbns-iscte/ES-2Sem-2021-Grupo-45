@@ -31,6 +31,15 @@ public class Condition {
         case(">"):
             output = x>n;
             break;
+        case("<="):
+            output = x<=n;
+            break;
+        case(">="):
+            output = x>=n;
+            break;
+        case("="):
+            output = x==n;
+            break;
         }
         return output;
     }

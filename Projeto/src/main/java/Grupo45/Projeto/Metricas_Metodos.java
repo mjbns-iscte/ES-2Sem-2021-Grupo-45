@@ -61,26 +61,15 @@ public class Metricas_Metodos {
 	private int wmc;
 	private int loc_class;
 	private String pack;
-	
-
 	private ArrayList<Rule> rules = new ArrayList<>();
 	private ArrayList<String> operators = new ArrayList<>();
-
-	
-
-
 	private ArrayList<File> ficheiros= new ArrayList<>();
 	private Excel excel;
-
-	
-
 
 	public Metricas_Metodos() {
 		super();
 		for(int i=0;i!=2;i++)
 			al.add(new ArrayList<String>());
-
-
 	}
 
 	public void analyze(File file) throws FileNotFoundException {
@@ -188,21 +177,16 @@ public class Metricas_Metodos {
 			values.clear();
 			Row row = it.next();
 			for(int j=0;j!=rule.getNumberOfConditions();j++) {
-
-				System.out.println((int)Double.parseDouble(row.getCell(e.getMetricColumn(rule.getCondition(j).getMetric())).toString()));
 				values.add((int)Double.parseDouble(row.getCell(e.getMetricColumn(rule.getCondition(j).getMetric())).toString()));
-				System.out.println(rule.getCondition(j).getMetric()+ " Done");
 			}
 			if(rule.ruleEvaluate(values)) {
 				if(rule.isClassRule()) {
-					codeSmells.add("Code Smell at Class " + row.getCell(2).toString());
-				}else	codeSmells.add("Code Smell at Method " + row.getCell(0).toString());
+					codeSmells.add(row.getCell(2).toString());
+				}else	codeSmells.add(row.getCell(0).toString() + " " + row.getCell(3).toString());
 			}
 		}
 		w.close();
 		return codeSmells;
-
-
 
 	}
 
@@ -223,25 +207,21 @@ public class Metricas_Metodos {
 			analyzeCyclometicComplexity(f);
 			for(int i=0;i!=getMainArray().get(0).size();i++) {
 				Row row =sheet.createRow(x);
-
+				String clas = f.getName();
 				row.createCell(0).setCellValue(x);
 				row.createCell(1).setCellValue(getPackage());
-				row.createCell(2).setCellValue(f.getName());
-				row.createCell(3).setCellValue(getMainArray().get(0).get(i));
+				row.createCell(2).setCellValue(clas.replaceAll(".java",""));
+				row.createCell(3).setCellValue(getMainArray().get(0).get(i).replaceAll("\\s+",""));
 				row.createCell(4).setCellValue(getNom_class());
 				row.createCell(5).setCellValue(getLoc_class());
 				row.createCell(6).setCellValue(getWmc());
 				row.createCell(7).setCellValue(Integer.parseInt(getMainArray().get(1).get(i)));
 				row.createCell(8).setCellValue(getMap().get(getMainArray().get(0).get(i)));
 
-
-
 				x++;
-
 			}
 
 		}
-		System.out.println(getMainArray().get(1).size());
 
 		FileOutputStream fileOut = new FileOutputStream(new File(name));
 		w.write(fileOut);

@@ -19,8 +19,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -40,7 +42,6 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 
 public class GUI {
 	private JFrame f = new JFrame();
@@ -86,25 +87,31 @@ public class GUI {
 	JButton button3 = new JButton("APPLY RULE");
 	JButton button4 = new JButton("MODIFY RULE");
 	JButton button5 = new JButton("DELETE RULE");
+	JButton button6 = new JButton("CHECK SMELLS");
 
 	String[] columnNames = { "MethodID", "package", "class", "method", "NOM_class", "LOC_class", "WMC_class",
 			"LOC_method", "CYCLO_method" };
 
 	private Excel excel;
+
 	private Graph graph = new Graph();
 	private TestPane smells = new TestPane();
 
+	HashMap<String, Boolean> islong = new HashMap<>();
+	HashMap<String, Boolean> isgod = new HashMap<>();
+	LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
+
 	Metricas_Metodos mm;
 
-	public GUI() throws IOException{
-		mm= new Metricas_Metodos();
+	public GUI() throws IOException {
+		mm = new Metricas_Metodos();
 		f = new JFrame("GUI");
 		f.setSize(1000, 750);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setLayout(new BorderLayout());				
+		f.setLayout(new BorderLayout());
 		jp1.setLayout(new BoxLayout(jp1, BoxLayout.PAGE_AXIS));
 		jp.setLayout(new BorderLayout());
-		//		jp.add(button, BorderLayout.NORTH);
+		// jp.add(button, BorderLayout.NORTH);
 		f.add(jp, BorderLayout.NORTH);
 		f.add(button2, BorderLayout.SOUTH);
 
@@ -115,16 +122,16 @@ public class GUI {
 			ruleSelect.addItem(r.getRuleName());
 		jp3.add(new JLabel("Rule Name:"));
 
+		readCodeSmellsExcel();
 		addRulesButton();
 		addSaveButton();
 		addApplyButton();
 		addModifyButton();
 		addDeleteButton();
 		addExitAction();
-
+		addCheckCodeSmells();
 
 	}
-
 
 	public void addOpenButton() {
 		jp.add(button, BorderLayout.NORTH);
@@ -141,7 +148,7 @@ public class GUI {
 						l.setText(j.getSelectedFile().getAbsolutePath());
 						File mainDir = j.getSelectedFile();
 						String path = j.getSelectedFile().getAbsolutePath();
-						ArrayList<File> files = mm.search(mainDir); 
+						ArrayList<File> files = mm.search(mainDir);
 						Path pathToAFile = Paths.get(path);
 						System.out.println("Path :" + path);
 
@@ -150,7 +157,7 @@ public class GUI {
 						try {
 							excel.setupExcel(pathExcel);
 
-							mm.metricsToExcel(files, excel);						
+							mm.metricsToExcel(files, excel);
 
 							excelToGUI(pathExcel);
 						} catch (IOException e) {
@@ -194,6 +201,7 @@ public class GUI {
 		is.close();
 		w.close();
 	}
+
 	public class TestPane extends JPanel {
 
 		private static final long serialVersionUID = 1L;
@@ -203,12 +211,13 @@ public class GUI {
 			GridBagConstraints gbc = new GridBagConstraints();
 			gbc.gridwidth = GridBagConstraints.REMAINDER;
 			for (String s : codeSmells) {
-				JLabel label = new JLabel(s);
-				label.setPreferredSize(new Dimension(280, 50));
+				JLabel label = new JLabel("Code Smell at " + s);
+				label.setPreferredSize(new Dimension(400, 50));
 				add(label, gbc);
 			}
 		}
 	}
+
 	public void addRulesButton() {
 		button2.addActionListener(new ActionListener() {
 			@Override
@@ -232,6 +241,7 @@ public class GUI {
 					jp4.add(button3);
 					jp4.add(button4);
 					jp4.add(button5);
+					jp4.add(button6);
 
 					jp3.add(nome);
 					jp3.add(method1);
@@ -251,15 +261,16 @@ public class GUI {
 					jp6.add(text3);
 
 					jp1.add(new JScrollPane(smells));
+
 					f1.setVisible(true);
 
 				} else
 					l.setText("the user cancelled the operation");
 			}
-		});					
+		});
 	}
 
-	public void addSaveButton(){
+	public void addSaveButton() {
 		button1.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent evt3) {
@@ -268,8 +279,10 @@ public class GUI {
 				l.setText("the user cancelled the operation");
 
 				ArrayList<Condition> conditions = new ArrayList<>();
-				ArrayList<String> operators = new ArrayList<>();
+
 				if (command3.equals("SAVE RULE")) {
+
+					ArrayList<String> operators = new ArrayList<>();
 
 					if (nome.getText() != "") {
 						Condition c = new Condition(method1.getSelectedItem().toString(),
@@ -306,14 +319,13 @@ public class GUI {
 						ruleSelect.addItem(rule.getRuleName());
 					}
 
+					System.out.println((String) nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem()
+							+ text1.getText() + option1.getSelectedItem() + method2.getSelectedItem()
+							+ sinal2.getSelectedItem() + text2.getText());
 
 					resetJPanel(jp3);
 					resetJPanel(jp5);
 					resetJPanel(jp6);
-
-					System.out.println((String) nome.getText() + method1.getSelectedItem() + sinal1.getSelectedItem()
-					+ text1.getText() + option1.getSelectedItem() + method2.getSelectedItem()
-					+ sinal2.getSelectedItem() + text2.getText());
 
 				}
 			}
@@ -330,14 +342,13 @@ public class GUI {
 
 				if (command.equals("APPLY RULE")) {
 					try {
-						LinkedHashSet<String> codeSmells = mm.applyRule(mm.getRuleNamed((String) ruleSelect.getSelectedItem()), excel);
+						codeSmells = mm.applyRule(mm.getRuleNamed((String) ruleSelect.getSelectedItem()), excel);
 						smells.removeAll();
 						smells.update(codeSmells);
 						smells.validate();
 
 						f1.setVisible(true);
 
-						generateCodeSmellsQuality(codeSmells,mm.getRuleNamed((String) ruleSelect.getSelectedItem()));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -345,6 +356,7 @@ public class GUI {
 			}
 		});
 	}
+
 	public void addModifyButton() {
 		button4.addActionListener(new ActionListener() {
 
@@ -399,6 +411,7 @@ public class GUI {
 			}
 		});
 	}
+
 	public void readTextFile() throws IOException {
 
 		File f = new File("Rules.txt");
@@ -411,6 +424,7 @@ public class GUI {
 			br.close();
 		}
 	}
+
 	public void resetJPanel(JPanel jp) {
 		for (Component c : jp.getComponents()) {
 
@@ -421,7 +435,7 @@ public class GUI {
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>) c;
 				cb.setSelectedIndex(0);
-			}else if (c instanceof JCheckBox) {
+			} else if (c instanceof JCheckBox) {
 				JCheckBox cb = (JCheckBox) c;
 				cb.setSelected(false);
 			}
@@ -446,52 +460,102 @@ public class GUI {
 			}
 		});
 	}
-	
-	public void generateCodeSmellsQuality(LinkedHashSet<String> codeSmells,Rule rule) throws IOException {
+
+	public void generateCodeSmellsQuality(Rule rule) throws IOException {
+		int tp = 0, tn = 0, fp = 0, fn = 0, nf = 0; // true positive, true negative, false positive, false negative, not
+													// found
+		boolean b = false;
+		for (String s : codeSmells) { // os ids que estao no codeSmells são os true
+			// tem de ser um botao porque só vai ser utilizado para as regras god-class e
+			// long-method
+			String key;
+			if (rule.isClassRule()) {
+				key = s;
+				if (isgod.containsKey(key)) {
+					b = isgod.get(key) == true;
+					isgod.remove(key);
+				} else {
+					nf++;
+				}
+			} else {
+				key = s.split(" ")[1];
+				if (islong.containsKey(key)) {
+					b = islong.get(key) == true;
+					islong.remove(key);
+				} else {
+					nf++;
+				}
+
+				if (b) {
+					tp++;
+				} else {
+					fp++; // tirar o .java, comparar a class e o metodo e tirar o boolean para uma lista
+							// -> tirar para uma lista num método a parte
+				}
+
+			}
+		}
+		for (Map.Entry<String, Boolean> cursor : islong.entrySet()) {
+			b = cursor.getValue() == false;
+			if (b) {
+				tn++;
+			} else {
+				fn++;
+			}
+		}
+
+		System.out.println(tp + " " + tn + " " + fp + " " + fn + " " + nf);
+		graph.createGraph(tp, tn, fp, fn, nf);
+
+	}
+
+	public void addCheckCodeSmells() {
+
+		button6.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent evt) {
+				String command = evt.getActionCommand();
+				System.out.println(command);
+				l.setText("the user cancelled the operation");
+
+				if (command.equals("CHECK SMELLS")) {
+					try {
+						generateCodeSmellsQuality(mm.getRuleNamed((String) ruleSelect.getSelectedItem()));
+						graph.setVisible(true);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+	}
+
+	public void readCodeSmellsExcel() throws IOException {
 		File file = new File("Code_Smells.xlsx");
 		FileInputStream is = new FileInputStream(file);
 		Workbook w = new XSSFWorkbook(is);
 		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
 		Iterator<Row> it = sheet.iterator();
 
-		ArrayList<Boolean> check = new ArrayList<>();
 		it.next();
-		int tp=0,tn=0,fp=0,fn=0; //true positive, true negative, false positive, false negative
-		while( it.hasNext()) {
+		while (it.hasNext()) {
 			Row row = it.next();
-			Cell cell;
-//TODO
-			if(rule.isClassRule()) {
-				cell = row.getCell(7);
-			}else {
-				cell = row.getCell(10);
+			// TODO
+			Cell meth = row.getCell(3);
+			Cell clas = row.getCell(2);
+			Cell cell = row.getCell(7);
+			Cell cell1 = row.getCell(10);
+			if (cell.getCellType().equals(CellType.BOOLEAN) && cell1.getCellType().equals(CellType.BOOLEAN)) {
+				islong.put(meth.getStringCellValue(), cell1.getBooleanCellValue());
+				isgod.put(clas.getStringCellValue(), cell.getBooleanCellValue());
 			}
+		}
 
-//			check.add(cell.getStringCellValue());
-			if(cell.getCellType().equals(CellType.BOOLEAN)) {
-			check.add(cell.getBooleanCellValue());
-			}
+		for (Map.Entry<String, Boolean> cursor : islong.entrySet()) {
+			System.out.println(cursor.getKey() + " " + cursor.getValue());
 		}
-		for(int i =0;i!=check.size();i++) {//i=0 é a linha 2
-			System.out.println(i + " " + check.get(i)); 
-		}
-		for(String s :codeSmells) { //os ids que estao no codeSmells são os true
-									//tem de ser um botao porque só vai ser utilizado para as regras god-class e long-method
-			System.out.println(check.get((int)Double.parseDouble(s.split(" ")[s.length()-1])-2));  //linha 485
-			boolean b=check.get(Integer.parseInt(s)-2) == true;
-			if(b) {
-				tp++;				
-			}else {fp++;
-			
-			}
-			
-			
-		}
-		graph.createGraph(tp,tn,fp,fn);
-		
-		f1.setVisible(true);
-		is.close();
-		w.close();
+
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, Exception {
@@ -499,6 +563,5 @@ public class GUI {
 		gui.f.setVisible(true);
 
 	}
-
 
 }
