@@ -8,12 +8,26 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+/*
+ * This class represents a histogram as a JFrame
+ * @author G45
+ * @author Andre Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
+ * @version 1.0
+ */
+
 public class Graph extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
+	/*
+	 * This method creates a histogram for the given int values
+	 * 
+	 * @param a is the value of the first histogram column
+	 * @param b is the value of the second histogram column
+	 * @param c is the value of the third histogram column
+	 * @param d is the value of the fourth histogram column
+	 * @param e is the value of the fifth histogram column
+	 */
 
 	public void createGraph(int a, int b, int c, int d, int e) {
 		DefaultCategoryDataset barra = new DefaultCategoryDataset();
