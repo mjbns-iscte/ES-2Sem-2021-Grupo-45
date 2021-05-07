@@ -60,7 +60,7 @@ class ExcelTest {
 	@Test
 	final void testGetMetricColumn() {
 		assertEquals(0, e.getMetricColumn("MethodID"));
-		assertEquals(0, e.getMetricColumn("NAOEXISTE"));
+		assertNotEquals(0, e.getMetricColumn("NAOEXISTE"));
 	}
 
 }

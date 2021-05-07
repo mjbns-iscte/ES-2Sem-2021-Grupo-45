@@ -21,17 +21,15 @@ class Cyclo_methodTest {
 	static void setUpBeforeClass() throws Exception {
 		Cyclo_method cm = new Cyclo_method();
 		names = cm.getNames();
-		f = new File("C:\\Users\\migue\\Documents\\Projeto\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		f = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		//f = new File("src\\main\\java\\Excel.java");
+		//File n = new File(f.getName());
 		InputStream is = new FileInputStream(f);
 		h = new Cyclo_method().cyclo_method(is);
-
-		System.out.println("Cyclo_methodTest.setUpBeforeClass() executed");
-
 	}
 
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
-		System.out.println("Cyclo_methodTest.tearDownAfterClass() executed");
 	}
 
 	@Test
@@ -65,9 +63,6 @@ class Cyclo_methodTest {
 		assertEquals(5, h.get(names.get(3)));
 		assertEquals(4, h.get(names.get(4)));
 		assertEquals(8, h.get(names.get(5)));
-		assertEquals(128, h.get(names.get(12)));
-		
-		System.out.println("Cyclo_methodTest.testCyclo_method() executed");
+		assertEquals(128, h.get(names.get(12)));		
 	}
-
 }
