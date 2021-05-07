@@ -27,7 +27,7 @@ class LOC_methodTest {
 		aa.add(a2);		
 		l = new LOC_method();
 		
-		File file = new File("C://jasml//src//com//jasml//compiler//ParsingException.java");	
+		File file = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src\\com\\jasml\\compiler\\ParsingException.java");	
 	    InputStream is = new FileInputStream(file);
 		 CompilationUnit cu = StaticJavaParser.parse(is);
 		 new LOC_method().visit(cu, aa);

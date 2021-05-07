@@ -24,34 +24,31 @@ class Metricas_MetodosTest{
 	static File file;
 	static File path;
 	static File file1;
-	private LOC_methodTest loc = new LOC_methodTest();
-	private Cyclo_methodTest cic = new Cyclo_methodTest();
 	static HashMap<String, Integer> map;
 	static int loc_class;
 	static int nom_class;
 	static int wmc_class;
 	static Excel e;
-	static Excel e1;
 	static ArrayList <File> files;
 	static ArrayList<Condition> cs = new ArrayList<>();
 	static ArrayList<String> ops = new ArrayList<>();
 	static Rule r =new Rule("is_Long", cs, ops);
 	
-	
-
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		mm = new Metricas_Metodos();
 		mm1= new Metricas_Metodos();
 		mm2= new Metricas_Metodos();
-        file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\com\\jasml\\compiler\\ParsingException.java");
-        file1= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
-        path= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
+      //  file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\com\\jasml\\compiler\\ParsingException.java");
+       // file1= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
+        //path= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
+		file = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		file1 = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
+		path = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
         mm.analyze(file);
         mm.analyzeCyclometicComplexity(file);
         e = new Excel();
-        e1 = new Excel();
-        e.setupExcel("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\TesteMetricas.xlsx");
+        e.setupExcel("gg45");
         files = mm.search(file1);
         
 	}
@@ -78,10 +75,10 @@ class Metricas_MetodosTest{
 		
 		
 		assertNotNull(al.get(0));
-		assertEquals(6,al.get(0).size());
+		assertEquals(32,al.get(0).size());
 		
 		assertNotNull(al.get(1));
-		assertEquals(6,al.get(1).size());
+		assertEquals(32,al.get(1).size());
 		
 	}
 	
@@ -95,8 +92,8 @@ class Metricas_MetodosTest{
 		assertNotNull(h);
 		assertNotNull(wmc_class);
 		
-		assertEquals(6, h.size());
-		assertEquals(11, wmc_class);
+		assertEquals(32, h.size());
+		assertEquals(303, wmc_class);
 	}
 	
 
@@ -117,27 +114,27 @@ class Metricas_MetodosTest{
 	@Test
 	final void testGetNomClass() {
 		assertNotNull(mm.getNom_class());
-		assertEquals(6,mm.getNom_class());
+		assertEquals(32,mm.getNom_class());
 	}
 	
 	@Test
 	final void testGetLocClass() {
 		assertNotNull(mm.getLoc_class());
-		assertEquals(50,mm.getLoc_class());
+		assertEquals(1371,mm.getLoc_class());
 	}
 	
 	@Test
 	final void getWmc() {
 		assertNotNull(mm.getWmc());
-		assertEquals(11,mm.getWmc());
+		assertEquals(303,mm.getWmc());
 	}
 	
 	@Test
 	final void testMetricsToExcel() throws IOException {
-		FileInputStream is = new FileInputStream(new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\TesteMetricas.xlsx"));
+		String name = e.getG_path();
+		FileInputStream is = new FileInputStream(new File(name));
 		Workbook w = new XSSFWorkbook(is);
 		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
-		assertNotNull(e1);
 		assertNotNull(files);
 		assertEquals("MethodID",sheet.getRow(0).getCell(0).toString());
 		assertEquals("1.0",sheet.getRow(1).getCell(0).toString());
@@ -149,10 +146,10 @@ class Metricas_MetodosTest{
 	@Test
 	final void testGetPackage() throws IOException {
 		mm.metricsToExcel(files, e);
-		FileInputStream is = new FileInputStream(new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\TesteMetricas.xlsx"));
+		String name = e.getG_path();
+		FileInputStream is = new FileInputStream(new File(name));
 		Workbook w = new XSSFWorkbook(is);
 		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
-		assertNotNull(e1);
 		assertNotNull(files);
 		assertEquals("com.jasml.classes",sheet.getRow(1).getCell(1).toString());
 		assertEquals("com.jasml.compiler",sheet.getRow(88).getCell(1).toString());
@@ -185,7 +182,7 @@ class Metricas_MetodosTest{
 	final void testReadTextFile() throws IOException {
 		assertEquals(0,mm1.getRuleArray().size());
 		mm1.readTextFile();                                              
-		assertEquals(true,mm1.getRuleArray().size()>0);           //Testa apenas se existirem regras no "Rules.txt" -> Criar regras antes
+		assertEquals(true,mm1.getRuleArray().size()>0);          
 		
 	}
 	@Test
@@ -209,8 +206,7 @@ class Metricas_MetodosTest{
 	
 	@Test
 	final void testApplyRule() throws IOException {
-		LinkedHashSet<String> output =mm.applyRule(r,e);
-		System.out.println(output.size());
+		LinkedHashSet<String> output = mm.applyRule(r,e);
 		Iterator<String> it = output.iterator();
 		assertNotNull(output);
 
