@@ -1,5 +1,11 @@
 package Grupo45.Projeto;
-
+/**
+ * Date May 07-2021
+* This class represents a Conditions that can be used by a Rule Object to evaluate Code Smells. A Condition represents a logical expression
+* @author G45
+* @author Andre Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
+* @version 1.0
+*/
 public class Condition {
 
 	/**

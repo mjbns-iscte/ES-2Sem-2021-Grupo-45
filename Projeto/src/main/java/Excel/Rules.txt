@@ -1,0 +1,3 @@
+long: :LOC_method:>:500: :AND: :CYCLO_method:>:10
+god: :LOC_class:>:800: :AND: :NOM_class:>:20: :OR: :WMC_class:>:200
+teste: :NOM_class:=:25: :AND: :NOM_class:=:10

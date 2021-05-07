@@ -9,12 +9,13 @@ import java.io.FileReader;
 
 import java.io.IOException;
 import java.io.InputStream;
-
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -26,7 +27,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 	/**
-	 * Date May 06-2021
+	 * Date May 07-2021
 	 * This program is able to extract metrics from all .java files in a given source.
 	 * It analyzes the code of java files for the metrics 'Lines of Code', 'Weighted Metric Count', 'Number of Class Methods' and 'Cyclomatic Complexity' creating a .xlsx file with the data.
 	 * It has a Graphical User Interface that also shows the analyzed metrics and allows users to create rules for Code Smells evaluation.
@@ -37,7 +38,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 	 * @author André Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
 	 * @version 1.0
 	 */
-	public class Metricas_Metodos {
+	public class Metrics {
 
 		/**
 		 * ArrayList composed of two ArrayLists. One for 'lines of code of the method' values and the other for the method signature
@@ -75,7 +76,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		/**
 		 * Constructor of the class that initiates the two arrays in the main array
 		 */
-		public Metricas_Metodos() {
+		public Metrics() {
 			super();
 			for (int i = 0; i != 2; i++)
 				al.add(new ArrayList<String>());
@@ -310,16 +311,16 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 * @throws IOException when there is a problem with the BufferedReader
 		 */
 		public void readTextFile() throws IOException {
+			InputStream is = this.getClass().getResourceAsStream("/Excel/Rules.txt");
+			File f;
 
-			File f = new File("Rules.txt");
-			if (f.exists()) {
 
-				BufferedReader br = new BufferedReader(new FileReader(f));
-				String st;
-				while ((st = br.readLine()) != null)
-					rules.add(new Rule(st));
-				br.close();
-			}
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String st;
+			while ((st = br.readLine()) != null)
+				rules.add(new Rule(st));
+			br.close();
+
 		}
 
 		/**

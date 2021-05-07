@@ -14,7 +14,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
  * @author G45
  * @author Andre Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
- * @version 1.0 
+ * @version 1.0 ~
+ * Date May 07-2021
  * This class was constructed to build an Excel file with a specific format  
  */
 public class Excel {
@@ -36,7 +37,7 @@ public class Excel {
 	/**
 	 * @param path where Excel will be saved
 	 * This method is responsible to build the Excel file and save him on the path
-	 * @throws IOException
+	 * @throws IOException when Excel is not found
 	 */
 	public void setupExcel(String path) throws IOException {
 		Workbook w = new XSSFWorkbook();

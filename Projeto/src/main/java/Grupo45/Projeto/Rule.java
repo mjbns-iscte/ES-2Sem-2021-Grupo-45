@@ -3,6 +3,7 @@ package Grupo45.Projeto;
 import java.util.ArrayList;
 
 /**
+ * Date May 07-2021
  * This class represents a Rule that can be applied to an Excel file with metric values to check if it is a Code Smell
 * @author G45
 * @author Andre Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
@@ -70,17 +71,22 @@ public class Rule {
 			if (i == 0) {
 				output = conditions.get(i).evaluate(value.get(i));
 			} else {
-				switch (operator.get(i - 1)) {
-				case ("AND"):
-					output = output && conditions.get(i).evaluate(value.get(i));
-				case ("OR"):
-					output = output || conditions.get(i).evaluate(value.get(i));
+				String s=operator.get(i-1);
+				if(s.equals("AND")) {
+					output = (output && conditions.get(i).evaluate(value.get(i)));
 				}
+				if(s.equals("OR")) {
+					output = (output || conditions.get(i).evaluate(value.get(i)));
+				}
+			
 			}
 		}
 		return output;
 	}
 
+	/**
+	 * @return returns rule name
+	 */
 	public String getRuleName() {
 		return ruleName;
 	}

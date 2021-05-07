@@ -46,7 +46,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 	/**
-	 * Date May 06-2021
+	 * Date May 07-2021
 	 * This program is able to extract metrics from all .java files in a given source.
 	 * It analyzes the code of java files for the metrics 'Lines of Code', 'Weighted Metric Count', 'Number of Class Methods' and 'Cyclomatic Complexity' creating a .xlsx file with the data.
 	 * It has a Graphical User Interface that also shows the analyzed metrics and allows users to create rules for Code Smells evaluation.
@@ -240,14 +240,14 @@ public class GUI {
 		/**
 		 * Main Metrics class being used
 		 */
-		Metricas_Metodos mm;
+		Metrics mm;
 
 		/**
 		 * Creates and initializes the graphical user interface with all the components
 		 * @throws IOException when it finds a problem with File or Excel input
 		 */
 		public GUI() throws IOException {
-			mm = new Metricas_Metodos();
+			mm = new Metrics();
 			f = new JFrame("GUI");
 			f.setSize(1000, 750);
 			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -588,7 +588,7 @@ public class GUI {
 
 		/**
 		 * This method resets and empties a given JPanel components
-		 * @param jp
+		 * @param jp is the Panel to be reseted
 		 */
 		public void resetJPanel(JPanel jp) {
 			for (Component c : jp.getComponents()) {
@@ -632,10 +632,10 @@ public class GUI {
 		/**
 		 * Generates a histogram with the quality of the Code Smells detected. Compares the Code Smells detected by this program with the ones
 		 * detected by a professional at Code_Smells.xlsx, and calculates the true positive, true negative, false positivem and false negative
-		 * @param rule
-		 * @throws IOException
+		 * @param rule is the Rule that will be checked for its Code Smells quality
+		 * 
 		 */
-		public void generateCodeSmellsQuality(Rule rule) throws IOException {
+		public void generateCodeSmellsQuality(Rule rule)  {
 			int tp = 0, tn = 0, fp = 0, fn = 0, nf = 0; 
 			boolean b = false;
 			for (String s : codeSmells) { 		
@@ -643,7 +643,9 @@ public class GUI {
 				if (rule.isClassRule()) {
 					key = s;
 					if (isgod.containsKey(key)) {
-						b = isgod.get(key) == true;
+						if(isgod.get(key) == true) {
+							tp++;
+						}else { fp++;}
 						isgod.remove(key);
 					} else {
 						nf++;
@@ -651,31 +653,36 @@ public class GUI {
 				} else {
 					key = s.split(" ")[1];
 					if (islong.containsKey(key)) {
-						b = islong.get(key) == true;
+						if(islong.get(key) == true) {
+							tp++;
+						}else {fp++;}
 						islong.remove(key);
 					} else {
 						nf++;
 					}
-					if (b) {
-						tp++;
-					} else {
-						fp++; 
-					}
-
+//					if (b) {
+//						tp++;
+//					} else {
+//						fp++;
+//					}
 				}
 			}
-			for (Map.Entry<String, Boolean> cursor : islong.entrySet()) {
-				b = cursor.getValue() == false;
-				if (b) {
+			for (Map.Entry<String, Boolean> cursor : islong.entrySet()) {			
+				if (cursor.getValue() == false) {
 					tn++;
 				} else {
 					fn++;
 				}
 			}
-
+			for (Map.Entry<String, Boolean> cursor : isgod.entrySet()) {			
+				if (cursor.getValue() == false) {
+					tn++;
+				} else {
+					fn++;
+				}
+			}
 			System.out.println(tp + " " + tn + " " + fp + " " + fn + " " + nf);
 			graph.createGraph(tp, tn, fp, fn, nf);
-
 		}
 
 		/**
@@ -691,12 +698,8 @@ public class GUI {
 					l.setText("the user cancelled the operation");
 
 					if (command.equals("CHECK SMELLS")) {
-						try {
 							generateCodeSmellsQuality(mm.getRuleNamed((String) ruleSelect.getSelectedItem()));
 							graph.setVisible(true);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
 					}
 				}
 			});

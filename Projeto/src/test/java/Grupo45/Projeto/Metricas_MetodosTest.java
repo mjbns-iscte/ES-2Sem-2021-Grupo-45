@@ -18,9 +18,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class Metricas_MetodosTest{
-	static Metricas_Metodos mm;
-	static Metricas_Metodos mm1;
-	static Metricas_Metodos mm2;
+	static Metrics mm;
+	static Metrics mm1;
+	static Metrics mm2;
 	static File file;
 	static File path;
 	static File file1;
@@ -41,9 +41,9 @@ class Metricas_MetodosTest{
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		mm = new Metricas_Metodos();
-		mm1= new Metricas_Metodos();
-		mm2= new Metricas_Metodos();
+		mm = new Metrics();
+		mm1= new Metrics();
+		mm2= new Metrics();
         file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\com\\jasml\\compiler\\ParsingException.java");
         file1= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
         path= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
@@ -190,7 +190,7 @@ class Metricas_MetodosTest{
 	}
 	@Test
 	final void testGetRuleNamed() {
-		mm1 = new Metricas_Metodos();
+		mm1 = new Metrics();
 		mm1.addRuleToArray(new Rule("is_Long_Method", cs, ops));
 		assertNotNull(mm1.getRuleNamed("is_Long_Method"));
 		assertThrows(NullPointerException.class, ()->{
