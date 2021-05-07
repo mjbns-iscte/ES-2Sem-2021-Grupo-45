@@ -119,7 +119,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 * @throws FileNotFoundException when the given file dosen't exist or can't be found
 		 */
 		public void analyzeCyclometicComplexity(File file) throws FileNotFoundException {
-			InputStream is = new FileInputStream(file);
+			FileInputStream is = new FileInputStream(file);
 			map.clear();
 			map = new Cyclo_method().cyclo_method(is);
 			wmc = 0;

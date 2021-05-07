@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -707,8 +708,7 @@ public class GUI {
 		 * @throws IOException when the Code_Smells.xlsx file is not found
 		 */
 		public void readCodeSmellsExcel() throws IOException {
-			File file = new File("Code_Smells.xlsx");
-			FileInputStream is = new FileInputStream(file);
+			InputStream is = this.getClass().getResourceAsStream("/Excel/Code_Smells.xlsx");
 			Workbook w = new XSSFWorkbook(is);
 			org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
 			Iterator<Row> it = sheet.iterator();
