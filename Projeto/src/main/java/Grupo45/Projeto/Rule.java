@@ -1,6 +1,15 @@
 package Grupo45.Projeto;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Date May 07-2021
@@ -145,6 +154,39 @@ public class Rule {
 	 */
 	public String getOperator(int i) {
 		return operator.get(i);
+	}
+
+	/**
+	 * This method applies a given Rule to an Excel file, comparing the conditions with the excel values to check if the Rule is true and if the method is a Code Smell
+	 * @param e  is the Excel where the rule will be applied
+	 * @return  returns a LinkedHashSet with information of all the code smells detected
+	 * @throws IOException  if it founds a problem getting the input file or the workbook
+	 */
+	public LinkedHashSet<String> applyRule(Excel e) throws IOException {
+		FileInputStream file = new FileInputStream(new File(e.getG_path()));
+		Workbook w = new XSSFWorkbook(file);
+		System.out.println(w.getActiveSheetIndex());
+		org.apache.poi.ss.usermodel.Sheet sheet = w.getSheet("METRICAS");
+		ArrayList<Integer> values = new ArrayList<>();
+		LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
+		Iterator<Row> it = sheet.iterator();
+		it.next();
+		while (it.hasNext()) {
+			values.clear();
+			Row row = it.next();
+			for (int j = 0; j != getNumberOfConditions(); j++) {
+				values.add((int) Double
+						.parseDouble(row.getCell(e.getMetricColumn(getCondition(j).getMetric())).toString()));
+			}
+			if (ruleEvaluate(values)) {
+				if (isClassRule()) {
+					codeSmells.add(row.getCell(2).toString());
+				} else
+					codeSmells.add(row.getCell(0).toString() + " " + row.getCell(3).toString());
+			}
+		}
+		w.close();
+		return codeSmells;
 	}
 
 }

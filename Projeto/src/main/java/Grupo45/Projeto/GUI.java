@@ -58,6 +58,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 	 * @version 1.0
 	 */
 public class GUI {
+		private GUIProduct gUIProduct = new GUIProduct();
 		/**
 		 * Main frame
 		 */
@@ -225,14 +226,6 @@ public class GUI {
 		private TestPane smells = new TestPane();
 
 		/**
-		 * HashMap with the correct code smells values from Code_Smells.xlsx for rules is_Long_Method
-		 */
-		private HashMap<String, Boolean> islong = new HashMap<>();
-		/**
-		 * HashMap with the correct code smells values from Code_Smells.xlsx for rules is_God_Class
-		 */
-		private HashMap<String, Boolean> isgod = new HashMap<>();
-		/**
 		 * LinkedHashSet with Code Smells detected from a given Rule on the GUI
 		 */
 		private LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
@@ -247,7 +240,7 @@ public class GUI {
 		/**
 		 * Main Metrics class being used
 		 */
-		Metrics mm;
+		private Metrics mm;
 
 		/**
 		 * Creates and initializes the graphical user interface with all the components
@@ -271,7 +264,7 @@ public class GUI {
 				ruleSelect.addItem(r.getRuleName());
 			jp3.add(new JLabel("Rule Name:"));
 
-			readCodeSmellsExcel();
+			gUIProduct.readCodeSmellsExcel();
 			addRulesButton();
 			addSaveButton();
 			addApplyButton();
@@ -649,17 +642,17 @@ public class GUI {
 				String key;
 				if (rule.isClassRule()) {
 					key = s;
-					checkPositiveBooleans(isgod,key);
+					checkPositiveBooleans(gUIProduct.getIsgod(),key);
 				} else {
 					key = s.split(" ")[1];
-					checkPositiveBooleans(islong,key);
+					checkPositiveBooleans(gUIProduct.getIslong(),key);
 
 				}
 			}
 			if (rule.isClassRule()) {
-				checkNegativeBooleans(isgod);
+				checkNegativeBooleans(gUIProduct.getIsgod());
 			}else{
-				checkNegativeBooleans(islong);
+				checkNegativeBooleans(gUIProduct.getIslong());
 			}
 			
 			graph.createGraph(tp, tn, fp, fn, nf);
@@ -716,26 +709,7 @@ public class GUI {
 		 * @throws IOException when the Code_Smells.xlsx file is not found
 		 */
 		public void readCodeSmellsExcel() throws IOException {
-			InputStream is = this.getClass().getResourceAsStream("/Excel/Code_Smells.xlsx");
-			Workbook w = new XSSFWorkbook(is);
-			org.apache.poi.ss.usermodel.Sheet sheet = w.getSheetAt(0);
-			Iterator<Row> it = sheet.iterator();
-
-			it.next();
-			while (it.hasNext()) {
-				Row row = it.next();
-				// TODO
-				Cell meth = row.getCell(3);
-				Cell clas = row.getCell(2);
-				Cell cell = row.getCell(7);
-				Cell cell1 = row.getCell(10);
-				if (cell.getCellType().equals(CellType.BOOLEAN) && cell1.getCellType().equals(CellType.BOOLEAN)) {
-					islong.put(meth.getStringCellValue(), cell1.getBooleanCellValue());
-					isgod.put(clas.getStringCellValue(), cell.getBooleanCellValue());
-				}
-			}
-
-			w.close();
+			gUIProduct.readCodeSmellsExcel();
 		}
 
 		/**

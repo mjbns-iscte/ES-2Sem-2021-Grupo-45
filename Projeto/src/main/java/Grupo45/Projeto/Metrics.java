@@ -39,6 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 	 */
 	public class Metrics {
 
+		private Search search = new Search();
 		/**
 		 * ArrayList composed of two ArrayLists. One for 'lines of code of the method' values and the other for the method signature
 		 */
@@ -67,11 +68,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 * ArrayList for all the active Rules that can be used in the GUI
 		 */
 		private ArrayList<Rule> rules = new ArrayList<>();
-		/**
-		 * ArrayList with all the java files found
-		 */
-		private ArrayList<File> ficheiros = new ArrayList<>();
-
 		/**
 		 * Constructor of the class that initiates the two arrays in the main array
 		 */
@@ -179,20 +175,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 * @return returns an array of all java files
 		 */
 		public ArrayList<File> search(File main) {
-			File[] files = main.listFiles();
-			for (File file : files) {
-				files_loader(file);
-			}
-			return ficheiros;
-		}
-
-		private void files_loader(File file) {
-			if (file.isDirectory()) {
-				this.search(file);
-			}
-			if (file.isFile() && file.getAbsolutePath().endsWith(".java")) {
-				ficheiros.add(file);
-			}
+			return search.search(main);
 		}
 
 		/**
@@ -205,30 +188,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 */
 		public LinkedHashSet<String> applyRule(Rule rule, Excel e) throws IOException {
 
-			FileInputStream file = new FileInputStream(new File(e.getG_path()));
-			Workbook w = new XSSFWorkbook(file);
-			System.out.println(w.getActiveSheetIndex());
-			org.apache.poi.ss.usermodel.Sheet sheet = w.getSheet("METRICAS");
-			ArrayList<Integer> values = new ArrayList<>();
-			LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
-			Iterator<Row> it = sheet.iterator();
-			it.next();
-			while (it.hasNext()) {
-				values.clear();
-				Row row = it.next();
-				for (int j = 0; j != rule.getNumberOfConditions(); j++) {
-					values.add((int) Double
-							.parseDouble(row.getCell(e.getMetricColumn(rule.getCondition(j).getMetric())).toString()));
-				}
-				if (rule.ruleEvaluate(values)) {
-					if (rule.isClassRule()) {
-						codeSmells.add(row.getCell(2).toString());
-					} else
-						codeSmells.add(row.getCell(0).toString() + " " + row.getCell(3).toString());
-				}
-			}
-			w.close();
-			return codeSmells;
+			return rule.applyRule(e);
 		}
 
 		/**
