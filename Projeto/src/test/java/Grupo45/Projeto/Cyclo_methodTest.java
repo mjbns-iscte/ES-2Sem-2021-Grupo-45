@@ -17,6 +17,7 @@ class Cyclo_methodTest {
 	static HashMap<String, Integer> h;
 	static File f;
 
+	@SuppressWarnings("static-access")
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		Cyclo_method cm = new Cyclo_method();

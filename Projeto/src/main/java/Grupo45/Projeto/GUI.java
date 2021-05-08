@@ -227,15 +227,22 @@ public class GUI {
 		/**
 		 * HashMap with the correct code smells values from Code_Smells.xlsx for rules is_Long_Method
 		 */
-		HashMap<String, Boolean> islong = new HashMap<>();
+		private HashMap<String, Boolean> islong = new HashMap<>();
 		/**
 		 * HashMap with the correct code smells values from Code_Smells.xlsx for rules is_God_Class
 		 */
-		HashMap<String, Boolean> isgod = new HashMap<>();
+		private HashMap<String, Boolean> isgod = new HashMap<>();
 		/**
 		 * LinkedHashSet with Code Smells detected from a given Rule on the GUI
 		 */
-		LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
+		private LinkedHashSet<String> codeSmells = new LinkedHashSet<>();
+		
+		
+		/**
+		 * Auxiliar variables to create code smells quality graph
+		 */
+		private int tp = 0, tn = 0, fp = 0, fn = 0, nf = 0; 
+
 
 		/**
 		 * Main Metrics class being used
@@ -343,9 +350,9 @@ public class GUI {
 				}
 			}
 
-			JTable table = new JTable(matriz, columnNames);
-			jp.add(table, BorderLayout.SOUTH);
-			jp.add(new JScrollPane(table));
+//			JTable table = new JTable(matriz, columnNames);
+//			jp.add(table, BorderLayout.SOUTH);
+			jp.add(new JScrollPane(new JTable(matriz, columnNames)));
 			f.setVisible(true);
 			is.close();
 			w.close();
@@ -636,53 +643,52 @@ public class GUI {
 		 * 
 		 */
 		public void generateCodeSmellsQuality(Rule rule)  {
-			int tp = 0, tn = 0, fp = 0, fn = 0, nf = 0; 
+			tp = 0; tn = 0; fp = 0; fn = 0; nf = 0; 
 			boolean b = false;
 			for (String s : codeSmells) { 		
 				String key;
 				if (rule.isClassRule()) {
 					key = s;
-					if (isgod.containsKey(key)) {
-						if(isgod.get(key) == true) {
-							tp++;
-						}else { fp++;}
-						isgod.remove(key);
-					} else {
-						nf++;
-					}
+					checkPositiveBooleans(isgod,key);
 				} else {
 					key = s.split(" ")[1];
-					if (islong.containsKey(key)) {
-						if(islong.get(key) == true) {
-							tp++;
-						}else {fp++;}
-						islong.remove(key);
-					} else {
-						nf++;
-					}
-//					if (b) {
-//						tp++;
-//					} else {
-//						fp++;
-//					}
+					checkPositiveBooleans(islong,key);
+
 				}
 			}
-			for (Map.Entry<String, Boolean> cursor : islong.entrySet()) {			
-				if (cursor.getValue() == false) {
-					tn++;
-				} else {
-					fn++;
-				}
+			if (rule.isClassRule()) {
+				checkNegativeBooleans(isgod);
+			}else{
+				checkNegativeBooleans(islong);
 			}
-			for (Map.Entry<String, Boolean> cursor : isgod.entrySet()) {			
-				if (cursor.getValue() == false) {
-					tn++;
-				} else {
-					fn++;
-				}
-			}
-			System.out.println(tp + " " + tn + " " + fp + " " + fn + " " + nf);
+			
 			graph.createGraph(tp, tn, fp, fn, nf);
+		}
+		
+		private void checkPositiveBooleans(HashMap<String, Boolean> map,String key) {
+			if (map.containsKey(key)) {
+				if(map.get(key) == true) {
+					tp++;
+				}else { fp++;
+
+				}
+				map.remove(key);
+			} else {
+
+				nf++;
+
+			}
+		}
+		
+		private void checkNegativeBooleans(HashMap<String, Boolean> map) {
+			for (Map.Entry<String, Boolean> cursor : map.entrySet()) {			
+				if (cursor.getValue() == false) {
+					tn++;
+				} else {
+					fn++;
+				}
+			}
+			
 		}
 
 		/**
@@ -694,7 +700,6 @@ public class GUI {
 
 				public void actionPerformed(ActionEvent evt) {
 					String command = evt.getActionCommand();
-					System.out.println(command);
 					l.setText("the user cancelled the operation");
 
 					if (command.equals("CHECK SMELLS")) {
@@ -730,8 +735,6 @@ public class GUI {
 				}
 			}
 
-			for (Map.Entry<String, Boolean> cursor : islong.entrySet()) {
-			}
 			w.close();
 		}
 

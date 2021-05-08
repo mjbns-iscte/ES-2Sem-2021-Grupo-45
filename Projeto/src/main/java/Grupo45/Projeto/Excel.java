@@ -12,11 +12,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
+ * * Date May 07-2021
+ * This class was constructed to build an Excel file with a specific format  
  * @author G45
  * @author Andre Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
  * @version 1.0 ~
- * Date May 07-2021
- * This class was constructed to build an Excel file with a specific format  
+ *
  */
 public class Excel {
 

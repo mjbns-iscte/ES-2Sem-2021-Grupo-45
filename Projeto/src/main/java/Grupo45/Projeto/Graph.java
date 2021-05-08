@@ -38,7 +38,7 @@ public class Graph extends JFrame {
 		barra.setValue(c, "False Positive", "");
 		barra.setValue(d, "False Negative", "");
 		barra.setValue(e, "Not Analysed", "");
-
+		
 		JFreeChart chart = ChartFactory.createBarChart("Code Smells Evaluation Quality", "Indicators",
 				"Number of Occurrences", barra, PlotOrientation.VERTICAL, true, true, false);
 		chart.addSubtitle(new TextTitle("True Positive: " + a +" True Negative: " + b +" False Positive: " + c +" False Negative: " + d +" NA: " + e));

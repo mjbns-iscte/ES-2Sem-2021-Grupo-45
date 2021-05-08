@@ -17,11 +17,12 @@ import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 /**
+ *	Date May 07-2021
+ * This class is responsible to count the cyclomatic complexity of given methods
  * @author G45
  * @author Andre Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
  * @version 1.0 
- * Date May 07-2021
- * This class is responsible to count the cyclomatic complexity of given methods
+ *
  */
 public class Cyclo_method {
 
