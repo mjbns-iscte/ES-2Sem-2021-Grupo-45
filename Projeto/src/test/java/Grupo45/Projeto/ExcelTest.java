@@ -59,8 +59,10 @@ class ExcelTest {
 	
 	@Test
 	final void testGetMetricColumn() {
-		assertEquals(0, e.getMetricColumn("MethodID"));
-		assertNotEquals(0, e.getMetricColumn("NAOEXISTE"));
+		assertEquals(0, e.getMetricColumn("MethodID"));	
+		assertThrows(IllegalStateException.class, ()->{
+			e.getMetricColumn("NAOEXISTE");                                             
+	    });
 	}
 
 }

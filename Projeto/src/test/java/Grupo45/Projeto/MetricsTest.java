@@ -17,7 +17,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class Metricas_MetodosTest{
+class MetricsTest{
 	static Metrics mm;
 	static Metrics mm1;
 	static Metrics mm2;
@@ -44,9 +44,12 @@ class Metricas_MetodosTest{
       //  file = new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src\\com\\jasml\\compiler\\ParsingException.java");
        // file1= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
         //path= new File("C:\\Users\\jtfgb\\Downloads\\ES_Projeto Teste\\src");
-		file = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-		file1 = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
-		path = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
+//		file = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+//		file1 = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
+//		path = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src");
+		file = new File("C:\\jasml\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		file1 = new File("C:\\jasml\\src");
+		path = new File("C:\\jasml\\src");
         mm.analyze(file);
         mm.analyzeCyclometicComplexity(file);
         e = new Excel();

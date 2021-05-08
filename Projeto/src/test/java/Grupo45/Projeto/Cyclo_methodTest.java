@@ -22,9 +22,8 @@ class Cyclo_methodTest {
 	static void setUpBeforeClass() throws Exception {
 		Cyclo_method cm = new Cyclo_method();
 		names = cm.getNames();
-		f = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
-		//f = new File("src\\main\\java\\Excel.java");
-		//File n = new File(f.getName());
+		//f = new File("C:\\Users\\migue\\Documents\\Projeto_ES\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
+		f = new File("C:\\jasml\\src\\com\\jasml\\compiler\\SourceCodeParser.java");
 		InputStream is = new FileInputStream(f);
 		h = new Cyclo_method().cyclo_method(is);
 	}
