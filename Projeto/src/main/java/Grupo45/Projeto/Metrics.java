@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-import org.apache.commons.io.FileUtils;
+
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -182,14 +181,18 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		public ArrayList<File> search(File main) {
 			File[] files = main.listFiles();
 			for (File file : files) {
-				if (file.isDirectory()) {
-					this.search(file);
-				}
-				if (file.isFile() && file.getAbsolutePath().endsWith(".java")) {
-					ficheiros.add(file);
-				}
+				files_loader(file);
 			}
 			return ficheiros;
+		}
+
+		private void files_loader(File file) {
+			if (file.isDirectory()) {
+				this.search(file);
+			}
+			if (file.isFile() && file.getAbsolutePath().endsWith(".java")) {
+				ficheiros.add(file);
+			}
 		}
 
 		/**
@@ -277,16 +280,8 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 * 
 		 */
 		public void createTestRule() {
-			Condition a = new Condition("LOC_method", ">", 10);
-			Condition a1 = new Condition("CYCLO_method", ">", 5);
-			ArrayList<Condition> cs = new ArrayList<>();
-			cs.add(a);
-			cs.add(a1);
-			ArrayList<String> ops = new ArrayList<>();
-			ops.add("OR");
-			ops.add("OR");
-			Rule rule = new Rule("is_Long_Method", cs, ops);
-			rules.add(rule);
+			Rule r = new Rule("teste: :NOM_class:=:25: :AND: :NOM_class:=:10");
+			rules.add(r);
 		}
 
 
@@ -312,9 +307,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 */
 		public void readTextFile() throws IOException {
 			InputStream is = this.getClass().getResourceAsStream("/Excel/Rules.txt");
-			File f;
-
-
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			String st;
 			while ((st = br.readLine()) != null)
