@@ -9,14 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -39,7 +36,6 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -58,7 +54,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 	 * @version 1.0
 	 */
 public class GUI {
-		private GUIProduct gUIProduct = new GUIProduct();
+		private SmellsQuality gUIProduct = new SmellsQuality();
 		/**
 		 * Main frame
 		 */
@@ -637,7 +633,6 @@ public class GUI {
 		 */
 		public void generateCodeSmellsQuality(Rule rule)  {
 			tp = 0; tn = 0; fp = 0; fn = 0; nf = 0; 
-			boolean b = false;
 			for (String s : codeSmells) { 		
 				String key;
 				if (rule.isClassRule()) {

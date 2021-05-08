@@ -6,20 +6,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
 import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
-public class GUIProduct {
+/**
+ * Date May 07-2021
+	 *This class reads Code_Smells.xlsx and import the value of is_God_Class and is_Long_Method.
+	 * 
+	 * 
+	 * @author G45
+	 * @author Andre Amado, Guilherme Henriques, João Guerra, Miguel Nunes, Francisco Mendes, Tiago Geraldo
+ * @version 1.0
+ *
+ */
+public class SmellsQuality {
 	private HashMap<String, Boolean> islong = new HashMap<>();
 	private HashMap<String, Boolean> isgod = new HashMap<>();
 
+	/**
+	 * @return returns Hash Map with is_Long_Method code smells.
+	 */
 	public HashMap<String, Boolean> getIslong() {
 		return islong;
 	}
 
+	/**
+	 * @return returns Hash Map with is_Long_Class code smells.
+	 */
 	public HashMap<String, Boolean> getIsgod() {
 		return isgod;
 	}
