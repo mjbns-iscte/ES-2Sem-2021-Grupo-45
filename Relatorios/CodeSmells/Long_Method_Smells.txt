@@ -1,0 +1,12 @@
+Grupo45.Projeto.GUI	public void excelToGUI(java.lang.String) throws java.io.IOException	aux	B5	0/5
+Grupo45.Projeto.Excel	public void setupExcel(java.lang.String) throws java.io.IOException	fileOut	B1	0/3
+Grupo45.Projeto.Metrics	public void readTextFile() throws java.io.IOException	rules	B2	0/2
+Grupo45.Projeto.GUI	public void generateCodeSmellsQuality(Grupo45.Projeto.Rule) 	key	B3	1/4
+Grupo45.Projeto.Metrics	public Grupo45.Projeto.Excel metricsToExcel(ArrayList<java.io.File>, Grupo45.Projeto.Excel) throws java.io.IOException	fileOut	B1	1/3
+Grupo45.Projeto.GUI	private void checkPositiveBooleans(HashMap<java.lang.String,java.lang.Boolean>, java.lang.String) 	map	B1	1/2
+Grupo45.Projeto.SmellsQuality	public void readCodeSmellsExcel() throws java.io.IOException	isgod	B1	9/11
+Grupo45.Projeto.SmellsQuality	public void readCodeSmellsExcel() throws java.io.IOException	isgod	B2	5/7
+Grupo45.Projeto.SmellsQuality	public void readCodeSmellsExcel() throws java.io.IOException	isgod	B3	4/6
+Grupo45.Projeto.SmellsQuality	public void readCodeSmellsExcel() throws java.io.IOException	islong	B1	9/11
+Grupo45.Projeto.SmellsQuality	public void readCodeSmellsExcel() throws java.io.IOException	islong	B2	5/7
+Grupo45.Projeto.SmellsQuality	public void readCodeSmellsExcel() throws java.io.IOException	islong	B3	4/6
