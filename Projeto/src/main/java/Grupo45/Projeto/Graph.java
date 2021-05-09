@@ -20,7 +20,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class Graph extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-
+	JFreeChart chart;
+	ChartPanel panel;
+	DefaultCategoryDataset barra;
 	/**
 	 * This method creates a histogram for the given int values
 	 * 
@@ -28,21 +30,21 @@ public class Graph extends JFrame {
 	 * @param b is the value of the second histogram column
 	 * @param c is the value of the third histogram column
 	 * @param d is the value of the fourth histogram column
-	 * @param e is the value of the fifth histogram column
+	 * @param e is the value of the fifth histogram colum
 	 */
 
 	public void createGraph(int a, int b, int c, int d, int e) {
-		DefaultCategoryDataset barra = new DefaultCategoryDataset();
+		barra = new DefaultCategoryDataset();
 		barra.setValue(a, "True Positive", "");
 		barra.setValue(b, "True Negative", "");
 		barra.setValue(c, "False Positive", "");
 		barra.setValue(d, "False Negative", "");
 		barra.setValue(e, "Not Analysed", "");
 		
-		JFreeChart chart = ChartFactory.createBarChart("Code Smells Evaluation Quality", "Indicators",
+		 chart = ChartFactory.createBarChart("Code Smells Evaluation Quality", "Indicators",
 				"Number of Occurrences", barra, PlotOrientation.VERTICAL, true, true, false);
 		chart.addSubtitle(new TextTitle("True Positive: " + a +" True Negative: " + b +" False Positive: " + c +" False Negative: " + d +" NA: " + e));
-		ChartPanel panel = new ChartPanel(chart);
+		panel = new ChartPanel(chart);
 		add(panel);
 		this.setSize(500, 500);
 

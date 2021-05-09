@@ -5,14 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -265,13 +263,16 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		 * @throws IOException when there is a problem with the BufferedReader
 		 */
 		public void readTextFile() throws IOException {
-			InputStream is = this.getClass().getResourceAsStream("/Excel/Rules.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			String st;
-			while ((st = br.readLine()) != null)
-				rules.add(new Rule(st));
-			br.close();
+			File f = new File("Rules.txt");
+			if(f.exists()) { 
 
+
+				BufferedReader br = new BufferedReader(new FileReader(f));      
+				String st;
+				while ((st = br.readLine()) != null)
+					rules.add(new Rule(st));
+				br.close();
+			}
 		}
 
 		/**
