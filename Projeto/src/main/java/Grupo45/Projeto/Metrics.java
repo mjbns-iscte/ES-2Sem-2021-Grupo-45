@@ -265,13 +265,21 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 		public void readTextFile() throws IOException {
 			File f = new File("Rules.txt");
 			if(f.exists()) { 
-
-
+				int i=0;
 				BufferedReader br = new BufferedReader(new FileReader(f));      
 				String st;
-				while ((st = br.readLine()) != null)
+				while ((st = br.readLine()) != null) {
+					i++;
 					rules.add(new Rule(st));
+				}
+				if(i==0) {
+					rules.add(new Rule("is_Long_Method: :LOC_method:>:40: :AND: :CYCLO_method:>:10"));
+					rules.add(new Rule("is_God_Class: :LOC_class:>:500: :AND: :NOM_class:>:20: :AND: :WMC_class:>:50"));
+				}
 				br.close();
+			} else { 
+				rules.add(new Rule("is_Long_Method: :LOC_method:>:40: :AND: :CYCLO_method:>:10"));
+				rules.add(new Rule("is_God_Class: :LOC_class:>:500: :AND: :NOM_class:>:20: :AND: :WMC_class:>:50"));
 			}
 		}
 

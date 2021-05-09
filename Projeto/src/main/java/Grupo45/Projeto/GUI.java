@@ -232,7 +232,6 @@ public class GUI {
 		 */
 		private int tp = 0, tn = 0, fp = 0, fn = 0, nf = 0; 
 
-
 		/**
 		 * Main Metrics class being used
 		 */
@@ -253,7 +252,7 @@ public class GUI {
 			f.add(jp, BorderLayout.NORTH);
 			f.add(button2, BorderLayout.SOUTH);
 
-			mm.readTextFile();
+			mm.readTextFile(); 
 			addOpenButton();
 
 			for (Rule r : mm.getRuleArray())
